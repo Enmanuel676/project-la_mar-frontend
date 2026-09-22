@@ -1,111 +1,222 @@
-:root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+@import 'tailwindcss';
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+@theme {
+  --color-primary: #67fde1;
+  --color-primary-container: #42e0c5;
+  --color-on-primary: #00382f;
+  --color-secondary: #ffb59d;
+  --color-secondary-container: #703623;
+  --color-on-secondary: #54210f;
+  --color-surface: #1d100e;
+  --color-surface-container-lowest: #170b09;
+  --color-surface-container-low: #261816;
+  --color-surface-container: #2a1c1a;
+  --color-surface-container-high: #352624;
+  --color-surface-container-highest: #41312e;
+  --color-surface-variant: #41312e;
+  --color-on-surface: #f6ddd9;
+  --color-on-surface-variant: #bacac5;
+  --color-outline: #85948f;
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --spacing-margin: 3rem;
+  --spacing-margin-mobile: 1.25rem;
+  --spacing-gutter: 1.5rem;
+  --spacing-space-xs: 0.25rem;
+  --spacing-space-sm: 0.5rem;
+  --spacing-space-md: 1rem;
+  --spacing-space-lg: 1.75rem;
+  --spacing-space-xl: 2.75rem;
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
+  --font-headline-2xl: 'Playfair Display', serif;
+  --font-headline-xl: 'Playfair Display', serif;
+  --font-headline-lg: 'Playfair Display', serif;
+  --font-headline-md: 'Playfair Display', serif;
+  --font-body-lg: 'Montserrat', sans-serif;
+  --font-body-md: 'Montserrat', sans-serif;
+  --font-body-sm: 'Montserrat', sans-serif;
+  --font-label-md: 'Montserrat', sans-serif;
+  --font-label-sm: 'Montserrat', sans-serif;
+
+  --text-headline-2xl: 56px;
+  --text-headline-2xl--line-height: 64px;
+  --text-headline-2xl--letter-spacing: -0.02em;
+  --text-headline-2xl--font-weight: 400;
+  --text-headline-xl: 40px;
+  --text-headline-xl--line-height: 48px;
+  --text-headline-xl--letter-spacing: -0.01em;
+  --text-headline-xl--font-weight: 400;
+  --text-headline-lg: 30px;
+  --text-headline-lg--line-height: 38px;
+  --text-headline-lg--font-weight: 500;
+  --text-headline-md: 22px;
+  --text-headline-md--line-height: 30px;
+  --text-headline-md--font-weight: 500;
+  --text-body-lg: 16px;
+  --text-body-lg--line-height: 26px;
+  --text-body-lg--letter-spacing: 0.01em;
+  --text-body-lg--font-weight: 300;
+  --text-body-md: 14px;
+  --text-body-md--line-height: 22px;
+  --text-body-md--letter-spacing: 0.01em;
+  --text-body-md--font-weight: 400;
+  --text-body-sm: 12px;
+  --text-body-sm--line-height: 18px;
+  --text-body-sm--font-weight: 400;
+  --text-label-md: 12px;
+  --text-label-md--line-height: 16px;
+  --text-label-md--letter-spacing: 0.14em;
+  --text-label-md--font-weight: 500;
+  --text-label-sm: 10px;
+  --text-label-sm--line-height: 14px;
+  --text-label-sm--letter-spacing: 0.18em;
+  --text-label-sm--font-weight: 600;
+}
+
+@layer base {
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    overscroll-behavior: none;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  main > :first-child {
+    margin-top: 0 !important;
+  }
+
+  main > :last-child {
+    margin-bottom: 0 !important;
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+@layer components {
+  /* Barra de navegación con degradado + blur que se desvanece hacia abajo */
+  .nav-gradient {
+    isolation: isolate;
+    background: transparent;
   }
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
+  .nav-gradient::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 -56px;
+    z-index: -1;
+    pointer-events: none;
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    background: linear-gradient(#1d100ef5 0%, #1d100ed1 45%, #1d100e59 75%, #1d100e00 100%);
+    -webkit-mask-image: linear-gradient(#000 50%, #0000 100%);
+    mask-image: linear-gradient(#000 50%, #0000 100%);
   }
-}
 
-body {
-  margin: 0;
-}
-
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
-
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
+  /* Menú móvil */
+  .menu-scrim {
+    opacity: 0;
+    background: #170b0959;
+    transition: opacity 0.35s;
   }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
+
+  .menu-overlay.is-open .menu-scrim {
+    opacity: 1;
   }
-}
-p {
-  margin: 0;
-}
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-}
+  .menu-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.9rem 0.25rem;
+    border-bottom: 1px solid #41312eb3;
+    font: 500 12px/16px Montserrat, sans-serif;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #f6ddd9;
+    transition:
+      color 0.2s,
+      padding 0.2s;
+  }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+  .menu-link .material-symbols-outlined {
+    color: #67fde1;
+    opacity: 0.6;
+    transition:
+      opacity 0.2s,
+      transform 0.2s;
+  }
+
+  .menu-link:hover,
+  .menu-link:focus-visible {
+    color: #67fde1;
+    outline: none;
+    padding-left: 0.6rem;
+  }
+
+  .menu-link:hover .material-symbols-outlined {
+    opacity: 1;
+    transform: translate(3px);
+  }
+
+  /* Efecto de disolución en píxeles (tarjetas y panel del menú) */
+  .pixel-card,
+  .pixel-panel {
+    position: relative;
+    will-change: filter;
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+  }
+
+  .pixel-card {
+    transition-property: background-color;
+  }
+
+  .pixel-card.is-hidden {
+    visibility: hidden;
+  }
+
+  .pixel-fx {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    border-radius: inherit;
+    image-rendering: pixelated;
+  }
+
+  /* Video "ring scroll" con bordes desvanecidos y brillo */
+  .ring-video-frame {
+    --fade-x: 6%;
+    --fade-y: 9%;
+    -webkit-mask-image:
+      linear-gradient(to right, transparent, #000 var(--fade-x), #000 calc(100% - var(--fade-x)), transparent),
+      linear-gradient(to bottom, transparent, #000 var(--fade-y), #000 calc(100% - var(--fade-y)), transparent);
+    mask-image:
+      linear-gradient(to right, transparent, #000 var(--fade-x), #000 calc(100% - var(--fade-x)), transparent),
+      linear-gradient(to bottom, transparent, #000 var(--fade-y), #000 calc(100% - var(--fade-y)), transparent);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+  }
+
+  .ring-video-frame video {
+    image-rendering: pixelated;
+  }
+
+  .ring-video-glint {
+    background: linear-gradient(105deg, #0000 40%, #67fde11a 48%, #ffb59d14 52%, #0000 60%) 0 0 / 250% 100%;
+    background-position: var(--glint, 50%) 0;
+    mix-blend-mode: screen;
+  }
 }
