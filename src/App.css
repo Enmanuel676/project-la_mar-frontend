@@ -1,0 +1,23 @@
+/* Contenedor principal de todas las páginas (debajo de la navbar fija) */
+.app-main {
+  width: 100%;
+  min-height: 100vh;
+  padding-top: var(--nav-height);
+  background: var(--color-surface);
+}
+
+.app-main > :first-child {
+  margin-top: 0 !important;
+}
+
+.app-main > :last-child {
+  margin-bottom: 0 !important;
+}
+
+.app-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  color: var(--color-on-surface);
+  overflow-x: clip;
+}

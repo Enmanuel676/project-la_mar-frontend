@@ -1,6 +1,8 @@
-@import 'tailwindcss';
+/* Estilos globales: variables de diseño, reset y estilos base del documento.
+   Los estilos de cada componente viven en el .css junto a su .jsx. */
 
-@theme {
+:root {
+  /* Colores */
   --color-primary: #67fde1;
   --color-primary-container: #42e0c5;
   --color-on-primary: #00382f;
@@ -17,206 +19,152 @@
   --color-on-surface: #f6ddd9;
   --color-on-surface-variant: #bacac5;
   --color-outline: #85948f;
+  --color-divider: #41312eb3;
 
-  --spacing-margin: 3rem;
-  --spacing-margin-mobile: 1.25rem;
-  --spacing-gutter: 1.5rem;
-  --spacing-space-xs: 0.25rem;
-  --spacing-space-sm: 0.5rem;
-  --spacing-space-md: 1rem;
-  --spacing-space-lg: 1.75rem;
-  --spacing-space-xl: 2.75rem;
+  /* Espaciado */
+  --margin: 3rem;
+  --margin-mobile: 1.25rem;
+  --gutter: 1.5rem;
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.75rem;
+  --space-xl: 2.75rem;
+  --nav-height: 5rem;
 
-  --font-headline-2xl: 'Playfair Display', serif;
-  --font-headline-xl: 'Playfair Display', serif;
-  --font-headline-lg: 'Playfair Display', serif;
-  --font-headline-md: 'Playfair Display', serif;
-  --font-body-lg: 'Montserrat', sans-serif;
-  --font-body-md: 'Montserrat', sans-serif;
-  --font-body-sm: 'Montserrat', sans-serif;
-  --font-label-md: 'Montserrat', sans-serif;
-  --font-label-sm: 'Montserrat', sans-serif;
+  /* Familias tipográficas */
+  --font-serif: 'Playfair Display', serif;
+  --font-sans: 'Montserrat', sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-  --text-headline-2xl: 56px;
-  --text-headline-2xl--line-height: 64px;
-  --text-headline-2xl--letter-spacing: -0.02em;
-  --text-headline-2xl--font-weight: 400;
-  --text-headline-xl: 40px;
-  --text-headline-xl--line-height: 48px;
-  --text-headline-xl--letter-spacing: -0.01em;
-  --text-headline-xl--font-weight: 400;
-  --text-headline-lg: 30px;
-  --text-headline-lg--line-height: 38px;
-  --text-headline-lg--font-weight: 500;
-  --text-headline-md: 22px;
-  --text-headline-md--line-height: 30px;
-  --text-headline-md--font-weight: 500;
-  --text-body-lg: 16px;
-  --text-body-lg--line-height: 26px;
-  --text-body-lg--letter-spacing: 0.01em;
-  --text-body-lg--font-weight: 300;
-  --text-body-md: 14px;
-  --text-body-md--line-height: 22px;
-  --text-body-md--letter-spacing: 0.01em;
-  --text-body-md--font-weight: 400;
-  --text-body-sm: 12px;
-  --text-body-sm--line-height: 18px;
-  --text-body-sm--font-weight: 400;
-  --text-label-md: 12px;
-  --text-label-md--line-height: 16px;
-  --text-label-md--letter-spacing: 0.14em;
-  --text-label-md--font-weight: 500;
-  --text-label-sm: 10px;
-  --text-label-sm--line-height: 14px;
-  --text-label-sm--letter-spacing: 0.18em;
-  --text-label-sm--font-weight: 600;
+  /* Estilos de texto (usar con `font:` y su `letter-spacing` correspondiente) */
+  --type-headline-2xl: 400 56px / 64px var(--font-serif);
+  --tracking-headline-2xl: -0.02em;
+  --type-headline-xl: 400 40px / 48px var(--font-serif);
+  --tracking-headline-xl: -0.01em;
+  --type-headline-lg: 500 30px / 38px var(--font-serif);
+  --type-headline-md: 500 22px / 30px var(--font-serif);
+  --type-body-lg: 300 16px / 26px var(--font-sans);
+  --type-body-md: 400 14px / 22px var(--font-sans);
+  --type-body-sm: 400 12px / 18px var(--font-sans);
+  --type-caption: 400 12px / 16px var(--font-sans);
+  --type-label-md: 500 12px / 16px var(--font-sans);
+  --tracking-label-md: 0.14em;
+  --type-label-sm: 600 10px / 14px var(--font-sans);
+  --tracking-label-sm: 0.18em;
+
+  /* Bordes, sombras y transiciones */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration: 150ms;
 }
 
-@layer base {
-  html,
-  body {
-    margin: 0;
-    padding: 0;
-  }
-
-  body {
-    overscroll-behavior: none;
-  }
-
-  button {
-    cursor: pointer;
-  }
-
-  main > :first-child {
-    margin-top: 0 !important;
-  }
-
-  main > :last-child {
-    margin-bottom: 0 !important;
-  }
-
-  ::-webkit-scrollbar {
-    display: none;
-  }
+/* Reset */
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0 solid;
 }
 
-@layer components {
-  /* Barra de navegación con degradado + blur que se desvanece hacia abajo */
-  .nav-gradient {
-    isolation: isolate;
-    background: transparent;
-  }
+html {
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  tab-size: 4;
+}
 
-  .nav-gradient::before {
-    content: '';
-    position: absolute;
-    inset: 0 0 -56px;
-    z-index: -1;
-    pointer-events: none;
-    -webkit-backdrop-filter: blur(14px);
-    backdrop-filter: blur(14px);
-    background: linear-gradient(#1d100ef5 0%, #1d100ed1 45%, #1d100e59 75%, #1d100e00 100%);
-    -webkit-mask-image: linear-gradient(#000 50%, #0000 100%);
-    mask-image: linear-gradient(#000 50%, #0000 100%);
-  }
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
 
-  /* Menú móvil */
-  .menu-scrim {
-    opacity: 0;
-    background: #170b0959;
-    transition: opacity 0.35s;
-  }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
 
-  .menu-overlay.is-open .menu-scrim {
-    opacity: 1;
-  }
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
 
-  .menu-link {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.9rem 0.25rem;
-    border-bottom: 1px solid #41312eb3;
-    font: 500 12px/16px Montserrat, sans-serif;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: #f6ddd9;
-    transition:
-      color 0.2s,
-      padding 0.2s;
-  }
+ol,
+ul {
+  list-style: none;
+}
 
-  .menu-link .material-symbols-outlined {
-    color: #67fde1;
-    opacity: 0.6;
-    transition:
-      opacity 0.2s,
-      transform 0.2s;
-  }
+img,
+svg,
+video,
+canvas {
+  display: block;
+  vertical-align: middle;
+}
 
-  .menu-link:hover,
-  .menu-link:focus-visible {
-    color: #67fde1;
-    outline: none;
-    padding-left: 0.6rem;
-  }
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
 
-  .menu-link:hover .material-symbols-outlined {
-    opacity: 1;
-    transform: translate(3px);
-  }
+button,
+input {
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  background-color: transparent;
+  border-radius: 0;
+  appearance: none;
+}
 
-  /* Efecto de disolución en píxeles (tarjetas y panel del menú) */
-  .pixel-card,
-  .pixel-panel {
-    position: relative;
-    will-change: filter;
-    -webkit-mask-size: 100% 100%;
-    mask-size: 100% 100%;
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
-  }
+button {
+  cursor: pointer;
+}
 
-  .pixel-card {
-    transition-property: background-color;
-  }
+table {
+  border-collapse: collapse;
+  text-indent: 0;
+  border-color: inherit;
+}
 
-  .pixel-card.is-hidden {
-    visibility: hidden;
-  }
+::placeholder {
+  opacity: 1;
+}
 
-  .pixel-fx {
-    position: absolute;
-    inset: 0;
-    z-index: 5;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    border-radius: inherit;
-    image-rendering: pixelated;
-  }
+[hidden]:where(:not([hidden='until-found'])) {
+  display: none !important;
+}
 
-  /* Video "ring scroll" con bordes desvanecidos y brillo */
-  .ring-video-frame {
-    --fade-x: 6%;
-    --fade-y: 9%;
-    -webkit-mask-image:
-      linear-gradient(to right, transparent, #000 var(--fade-x), #000 calc(100% - var(--fade-x)), transparent),
-      linear-gradient(to bottom, transparent, #000 var(--fade-y), #000 calc(100% - var(--fade-y)), transparent);
-    mask-image:
-      linear-gradient(to right, transparent, #000 var(--fade-x), #000 calc(100% - var(--fade-x)), transparent),
-      linear-gradient(to bottom, transparent, #000 var(--fade-y), #000 calc(100% - var(--fade-y)), transparent);
-    -webkit-mask-composite: source-in;
-    mask-composite: intersect;
-  }
+/* Documento */
+body {
+  overscroll-behavior: none;
+  background: var(--color-surface);
+  color: var(--color-on-surface);
+  font: var(--type-body-md);
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
-  .ring-video-frame video {
-    image-rendering: pixelated;
-  }
+::selection {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
 
-  .ring-video-glint {
-    background: linear-gradient(105deg, #0000 40%, #67fde11a 48%, #ffb59d14 52%, #0000 60%) 0 0 / 250% 100%;
-    background-position: var(--glint, 50%) 0;
-    mix-blend-mode: screen;
-  }
+::-webkit-scrollbar {
+  display: none;
 }

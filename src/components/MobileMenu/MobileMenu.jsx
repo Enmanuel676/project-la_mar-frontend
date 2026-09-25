@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { NAV_LINKS } from '../data/content'
-import { createSurface, prefersReducedMotion, renderSurface } from '../lib/pixelDissolve'
+import { NavLink } from 'react-router'
+import { NAV_LINKS } from '../../data/content'
+import { createSurface, prefersReducedMotion, renderSurface } from '../../lib/pixelDissolve'
+import './MobileMenu.css'
 
 const ANIMATION_MS = 520
 
@@ -96,60 +98,58 @@ function MobileMenu({ open, onClose, returnFocusRef }) {
     <div
       id="mobile-menu"
       aria-hidden={!open}
-      className={`menu-overlay fixed inset-0 z-40 items-center justify-center px-margin-mobile ${
-        shown ? 'flex' : 'hidden'
-      }${open && visible ? ' is-open' : ''}`}
+      className={`mobile-menu${shown ? ' is-shown' : ''}${open && visible ? ' is-open' : ''}`}
     >
-      <div className="menu-scrim absolute inset-0" onClick={onClose} />
+      <div className="mobile-menu__scrim" onClick={onClose} />
       <nav
         ref={panelRef}
         role="dialog"
         aria-modal="true"
         aria-label="Menú principal"
-        className="pixel-panel relative w-full max-w-sm bg-surface-container-low/70 backdrop-blur-[6px] rounded-xl shadow-2xl p-space-lg"
+        className="mobile-menu__panel"
       >
-        <div className="flex items-center justify-between mb-space-md">
-          <span className="font-label-sm text-label-sm uppercase tracking-[0.18em] text-primary">
-            Menú
-          </span>
-          <button
-            type="button"
-            aria-label="Cerrar menú"
-            className="w-9 h-9 -mr-2 flex items-center justify-center rounded-lg text-on-surface-variant hover:text-on-surface"
-            onClick={onClose}
-          >
-            <span className="material-symbols-outlined text-[22px]">close</span>
+        <div className="mobile-menu__header">
+          <span className="mobile-menu__title">Menú</span>
+          <button type="button" aria-label="Cerrar menú" className="mobile-menu__close" onClick={onClose}>
+            <span className="mobile-menu__close-icon material-symbols-outlined">close</span>
           </button>
         </div>
 
-        <ul className="space-y-1">
-          {NAV_LINKS.map((link, index) => (
-            <li key={link.path}>
-              <a
-                ref={index === 0 ? firstLinkRef : null}
-                className="menu-link"
-                data-path={link.path}
-                href="#"
-                onClick={onClose}
-              >
+        <ul className="mobile-menu__list">
+          {NAV_LINKS.map((link, index) => {
+            const ref = index === 0 ? firstLinkRef : null
+            const content = (
+              <>
                 <span>{link.label}</span>
-                <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
-              </a>
-            </li>
-          ))}
+                <span className="mobile-menu__link-icon material-symbols-outlined">
+                  {link.to ? 'arrow_forward' : 'arrow_outward'}
+                </span>
+              </>
+            )
+            return (
+              <li key={link.path}>
+                {link.to ? (
+                  <NavLink ref={ref} className="mobile-menu__link" to={link.to} onClick={onClose}>
+                    {content}
+                  </NavLink>
+                ) : (
+                  <a
+                    ref={ref}
+                    className="mobile-menu__link"
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={onClose}
+                  >
+                    {content}
+                  </a>
+                )}
+              </li>
+            )
+          })}
         </ul>
 
-        <a
-          className="mt-space-lg w-full inline-flex items-center justify-center gap-2 py-3 px-6 bg-primary text-on-primary font-label-md text-label-md uppercase tracking-[0.14em] rounded-lg shadow-lg hover:bg-primary-container transition-colors"
-          data-path="cita-privada"
-          href="#"
-          onClick={onClose}
-        >
-          <span>Concierge Privé</span>
-          <span className="material-symbols-outlined text-[18px]">arrow_outward</span>
-        </a>
-
-        <canvas ref={fxRef} aria-hidden="true" className="pixel-fx" />
+        <canvas ref={fxRef} aria-hidden="true" className="mobile-menu__fx" />
       </nav>
     </div>
   )

@@ -1,10 +1,11 @@
 import { useEffect, useRef } from 'react'
-import { prefersReducedMotion } from '../lib/pixelDissolve'
-import { ringAngle } from '../lib/ringAngle'
-import AtelierCard from './cards/AtelierCard'
-import PresenceCard from './cards/PresenceCard'
-import ProvenanceCard from './cards/ProvenanceCard'
-import SpecsCard from './cards/SpecsCard'
+import { prefersReducedMotion } from '../../lib/pixelDissolve'
+import { ringAngle } from '../../lib/ringAngle'
+import AtelierCard from '../cards/AtelierCard/AtelierCard'
+import PresenceCard from '../cards/PresenceCard/PresenceCard'
+import ProvenanceCard from '../cards/ProvenanceCard/ProvenanceCard'
+import SpecsCard from '../cards/SpecsCard/SpecsCard'
+import './RingScrollVideo.css'
 
 // BASE_URL respeta el `base` de vite.config.js (necesario en GitHub Pages).
 const VIDEO_SRC = `${import.meta.env.BASE_URL}ring-scroll.mp4`
@@ -68,7 +69,7 @@ function RingScrollVideo() {
         video.currentTime = current
       }
 
-      const angle = ((current / getDuration()) * 3git reset --soft HEAD~160) % 360
+      const angle = ((current / getDuration()) * 360) % 360
       ringAngle.set(angle)
       glint.style.setProperty('--glint', `${(100 - (angle / 360) * 100).toFixed(1)}%`)
 
@@ -101,34 +102,34 @@ function RingScrollVideo() {
   return (
     <section
       ref={sectionRef}
-      className="relative z-10 w-full min-h-[300vh] md:min-h-[380vh] px-margin-mobile md:px-margin"
+      className="ring-scroll"
     >
-      <div className="sticky top-20 h-[calc(100svh-5rem)] w-screen ml-[calc(50%-50vw)] pointer-events-none">
-        <div className="ring-video-frame absolute inset-0">
+      <div className="ring-scroll__stage">
+        <div className="ring-scroll__frame">
           <video
             ref={videoRef}
-            aria-label="Bague L'Abysse Vert en rotation - Haute Joaillerie"
-            className="absolute inset-0 w-full h-full object-cover"
+            aria-label="Anillo El Abismo Verde en rotación - Alta Joyería"
+            className="ring-scroll__video"
             muted
             playsInline
             preload="auto"
             src={VIDEO_SRC}
           />
-          <div ref={glintRef} className="ring-video-glint absolute inset-0 pointer-events-none" />
+          <div ref={glintRef} className="ring-scroll__glint" />
         </div>
       </div>
 
-      <div className="relative z-30 pointer-events-none -mt-[calc(100svh-5rem)] pt-[45svh] md:pt-0 flex flex-col gap-y-[30svh] md:gap-y-72 pb-[30svh] md:pb-64">
-        <div className="w-full flex justify-center md:justify-start">
+      <div className="ring-scroll__cards">
+        <div className="ring-scroll__slot ring-scroll__slot--start">
           <ProvenanceCard />
         </div>
-        <div className="w-full flex justify-center md:justify-end">
+        <div className="ring-scroll__slot ring-scroll__slot--end">
           <PresenceCard />
         </div>
-        <div className="w-full flex justify-center md:justify-start">
+        <div className="ring-scroll__slot ring-scroll__slot--start">
           <AtelierCard />
         </div>
-        <div className="w-full flex justify-center md:justify-end">
+        <div className="ring-scroll__slot ring-scroll__slot--end">
           <SpecsCard />
         </div>
       </div>

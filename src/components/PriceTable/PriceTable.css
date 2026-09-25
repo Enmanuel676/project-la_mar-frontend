@@ -1,0 +1,73 @@
+/* Tabla sencilla de precios (quilataje · USD) */
+.price-list {
+  overflow-x: auto;
+  border-radius: var(--radius-xl);
+  background: var(--color-surface-container-low);
+}
+
+.price-list__table {
+  width: 100%;
+  font: var(--type-body-sm);
+}
+
+.price-list__title {
+  padding: 0.85rem 1rem;
+  background: var(--color-surface-container);
+  font: var(--type-label-sm);
+  letter-spacing: var(--tracking-label-sm);
+  text-transform: uppercase;
+  text-align: left;
+  color: var(--color-primary);
+}
+
+.price-list__table th,
+.price-list__table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--color-divider);
+  white-space: nowrap;
+}
+
+.price-list__table thead th {
+  font: var(--type-label-sm);
+  letter-spacing: var(--tracking-label-sm);
+  text-transform: uppercase;
+  color: var(--color-secondary);
+  text-align: right;
+}
+
+.price-list__table .price-list__karat {
+  text-align: left;
+}
+
+.price-list__karat-name {
+  font-weight: 500;
+  color: var(--color-on-surface);
+}
+
+.price-list__purity {
+  margin-left: 0.5rem;
+  font: var(--type-caption);
+  color: var(--color-outline);
+}
+
+.price-list__table td {
+  text-align: right;
+  font-family: var(--font-mono);
+  color: var(--color-on-surface);
+}
+
+.price-list__table tbody tr:last-child > * {
+  border-bottom: none;
+}
+
+.price-list__table tbody tr:hover {
+  background: var(--color-surface-container-high);
+}
+
+/* Teléfono: celdas más compactas para que quepa sin desplazamiento */
+@media (max-width: 639.98px) {
+  .price-list__table th,
+  .price-list__table td {
+    padding: 0.65rem 0.75rem;
+  }
+}

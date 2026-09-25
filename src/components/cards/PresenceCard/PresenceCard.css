@@ -1,0 +1,80 @@
+/* Tarjeta 02: el anillo puesto (foto con cita) */
+.presence-card {
+  padding: var(--space-md);
+}
+
+.presence-card__media {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-container-lowest);
+}
+
+.presence-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 700ms var(--ease);
+}
+
+.presence-card__image:hover {
+  transform: scale(1.05);
+}
+
+.presence-card__shade {
+  position: absolute;
+  inset: 0;
+  opacity: 0.6;
+  background: linear-gradient(to top, var(--color-surface-container-lowest), transparent 50%, transparent);
+}
+
+.presence-card__caption {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  left: 1rem;
+}
+
+.presence-card__quote {
+  font: var(--type-headline-md);
+  font-style: italic;
+  color: var(--color-on-surface);
+  filter: drop-shadow(0 3px 3px rgb(0 0 0 / 0.12));
+}
+
+.presence-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding-top: 0.25rem;
+}
+
+.presence-card__title {
+  font: var(--type-headline-md);
+  color: var(--color-on-surface);
+}
+
+.presence-card__text {
+  font: var(--type-body-md);
+  letter-spacing: 0.01em;
+  color: var(--color-on-surface-variant);
+}
+
+@media (min-width: 768px) {
+  .presence-card {
+    max-width: 28rem;
+    padding: var(--space-lg);
+  }
+
+  .presence-card__media {
+    aspect-ratio: 3 / 4;
+  }
+}
+
+@media (min-width: 1024px) {
+  .presence-card {
+    max-width: 36rem;
+  }
+}

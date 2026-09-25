@@ -1,0 +1,97 @@
+/* Tarjeta 03: el trabajo en el taller */
+.atelier-card {
+  padding: var(--space-md);
+}
+
+.atelier-card__media {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-container-lowest);
+}
+
+.atelier-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 700ms var(--ease);
+}
+
+.atelier-card__image:hover {
+  transform: scale(1.05);
+}
+
+.atelier-card__badge {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--color-surface-container-lowest) 80%, transparent);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.atelier-card__badge-text {
+  font: var(--type-label-sm);
+  letter-spacing: var(--tracking-label-md);
+  text-transform: uppercase;
+  color: var(--color-secondary);
+}
+
+.atelier-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.atelier-card__title {
+  font: var(--type-headline-lg);
+  color: var(--color-on-surface);
+}
+
+.atelier-card__text {
+  font: var(--type-body-md);
+  line-height: 1.625;
+  letter-spacing: 0.01em;
+  color: var(--color-on-surface-variant);
+}
+
+.atelier-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding-top: 0.25rem;
+}
+
+.atelier-card__tag {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  background: var(--color-surface-container-high);
+  font: var(--type-label-sm);
+  letter-spacing: var(--tracking-label-sm);
+  color: var(--color-on-surface-variant);
+}
+
+.atelier-card__tag--accent {
+  color: var(--color-secondary);
+}
+
+@media (min-width: 768px) {
+  .atelier-card {
+    max-width: 28rem;
+    padding: var(--space-lg);
+  }
+
+  .atelier-card__media {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+@media (min-width: 1024px) {
+  .atelier-card {
+    max-width: 36rem;
+  }
+}

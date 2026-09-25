@@ -15,7 +15,9 @@ export const ringAngle = {
   subscribe(listener) {
     listeners.add(listener)
     listener(angle)
-    return () => listeners.delete(listener)
+    return () => {
+      listeners.delete(listener)
+    }
   },
   // Ángulo fijado por el usuario (clic en una faceta); el scroll lo libera.
   getManual: () => manualAngle,

@@ -1,0 +1,41 @@
+/* Halos de color difuminados fijos detrás de todo el contenido */
+.ambient-glow {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ambient-glow__halo {
+  position: absolute;
+  border-radius: 9999px;
+}
+
+.ambient-glow__halo--top {
+  top: 18%;
+  left: 50%;
+  width: 720px;
+  height: 720px;
+  transform: translateX(-50%);
+  background: color-mix(in srgb, var(--color-primary) 5%, transparent);
+  filter: blur(160px);
+}
+
+.ambient-glow__halo--middle {
+  top: 55%;
+  left: 20%;
+  width: 520px;
+  height: 520px;
+  background: color-mix(in srgb, var(--color-secondary-container) 15%, transparent);
+  filter: blur(140px);
+}
+
+.ambient-glow__halo--bottom {
+  top: 75%;
+  right: 15%;
+  width: 480px;
+  height: 480px;
+  background: color-mix(in srgb, var(--color-primary) 5%, transparent);
+  filter: blur(150px);
+}

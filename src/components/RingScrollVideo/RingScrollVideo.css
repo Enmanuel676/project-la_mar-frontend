@@ -1,0 +1,94 @@
+/* Sección "ring scroll": video fijo que gira con el scroll y tarjetas flotando encima */
+.ring-scroll {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  min-height: 300vh;
+  padding-inline: var(--margin-mobile);
+}
+
+/* Escenario pegado bajo la navbar, a todo el ancho de la ventana */
+.ring-scroll__stage {
+  position: sticky;
+  top: var(--nav-height);
+  width: 100vw;
+  height: calc(100svh - var(--nav-height));
+  margin-left: calc(50% - 50vw);
+  pointer-events: none;
+}
+
+/* Marco con los bordes desvanecidos */
+.ring-scroll__frame {
+  --fade-x: 6%;
+  --fade-y: 9%;
+  position: absolute;
+  inset: 0;
+  -webkit-mask-image:
+    linear-gradient(to right, transparent, #000 var(--fade-x), #000 calc(100% - var(--fade-x)), transparent),
+    linear-gradient(to bottom, transparent, #000 var(--fade-y), #000 calc(100% - var(--fade-y)), transparent);
+  mask-image:
+    linear-gradient(to right, transparent, #000 var(--fade-x), #000 calc(100% - var(--fade-x)), transparent),
+    linear-gradient(to bottom, transparent, #000 var(--fade-y), #000 calc(100% - var(--fade-y)), transparent);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+.ring-scroll__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: pixelated;
+}
+
+/* Brillo que recorre el anillo; --glint lo actualiza RingScrollVideo.jsx */
+.ring-scroll__glint {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(105deg, #0000 40%, #67fde11a 48%, #ffb59d14 52%, #0000 60%) 0 0 / 250% 100%;
+  background-position: var(--glint, 50%) 0;
+  mix-blend-mode: screen;
+}
+
+/* Columna de tarjetas que se desplaza sobre el video */
+.ring-scroll__cards {
+  position: relative;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  row-gap: 30svh;
+  margin-top: calc(-1 * (100svh - var(--nav-height)));
+  padding-top: 45svh;
+  padding-bottom: 30svh;
+  pointer-events: none;
+}
+
+.ring-scroll__slot {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Tableta y escritorio: las tarjetas alternan entre izquierda y derecha */
+@media (min-width: 768px) {
+  .ring-scroll {
+    min-height: 380vh;
+    padding-inline: var(--margin);
+  }
+
+  .ring-scroll__cards {
+    row-gap: 18rem;
+    padding-top: 0;
+    padding-bottom: 16rem;
+  }
+
+  .ring-scroll__slot--start {
+    justify-content: flex-start;
+  }
+
+  .ring-scroll__slot--end {
+    justify-content: flex-end;
+  }
+}
