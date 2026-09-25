@@ -12,7 +12,7 @@ function PriceReport({ rows = GOLD_PRICES, scrapRows = SCRAP_PRICES, updatedAt =
         <div className="price-report__header">
           <div>
             <span className="price-report__kicker">Precios del oro por gramo</span>
-            <h1 className="price-report__title">Informes de precios</h1>
+            <h1 className="price-report__title">Informes de precios aproximados</h1>
           </div>
           <p className="price-report__updated">
             Última actualización: {updatedAt ? updatedAt.toLocaleString('es-ES') : '—'}
@@ -20,6 +20,7 @@ function PriceReport({ rows = GOLD_PRICES, scrapRows = SCRAP_PRICES, updatedAt =
         </div>
 
         <div className="price-report__block">
+          <span className="price-report__line"></span>
           <div>
             <h2 className="price-report__subtitle">Precios de joya como prenda</h2>
             <p className="price-report__note">Precio por gramo según el quilataje.</p>
@@ -76,7 +77,7 @@ function PriceReport({ rows = GOLD_PRICES, scrapRows = SCRAP_PRICES, updatedAt =
         </div>
 
         <div className="price-report__cta">
-          <h2 className="price-report__cta-title">Vive la Experiencia de El Abismo Verde</h2>
+          <h2 className="price-report__cta-title">Si desea conocer un precio exacto...</h2>
           <a className="price-report__cta-button" href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
             Contáctanos
           </a>

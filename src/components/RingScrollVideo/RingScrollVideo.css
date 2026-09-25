@@ -23,6 +23,7 @@
   --fade-y: 9%;
   position: absolute;
   inset: 0;
+  overflow: hidden;
   -webkit-mask-image:
     linear-gradient(to right, transparent, #000 var(--fade-x), #000 calc(100% - var(--fade-x)), transparent),
     linear-gradient(to bottom, transparent, #000 var(--fade-y), #000 calc(100% - var(--fade-y)), transparent);
@@ -33,7 +34,8 @@
   mask-composite: intersect;
 }
 
-.ring-scroll__video {
+/* Lienzo con el fotograma actual (1280×720), escalado como un video en "cover" */
+.ring-scroll__canvas {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -42,14 +44,19 @@
   image-rendering: pixelated;
 }
 
-/* Brillo que recorre el anillo; --glint lo actualiza RingScrollVideo.jsx */
+/* Brillo que recorre el anillo: mide 2.5 veces el marco y RingScrollVideo.jsx
+   lo desplaza con transform (0% a -60%) para no repintarlo en cada frame */
 .ring-scroll__glint {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 250%;
+  height: 100%;
   pointer-events: none;
-  background: linear-gradient(105deg, #0000 40%, #67fde11a 48%, #ffb59d14 52%, #0000 60%) 0 0 / 250% 100%;
-  background-position: var(--glint, 50%) 0;
+  background: linear-gradient(105deg, #0000 40%, #67fde11a 48%, #ffb59d14 52%, #0000 60%);
   mix-blend-mode: screen;
+  transform: translate3d(-30%, 0, 0);
+  will-change: transform;
 }
 
 /* Columna de tarjetas que se desplaza sobre el video */

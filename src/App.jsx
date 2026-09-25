@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useLayoutEffect } from 'react'
 import { HashRouter, Route, Routes, useLocation } from 'react-router'
 import AmbientGlow from './components/AmbientGlow/AmbientGlow'
 import Footer from './components/Footer/Footer'
@@ -9,10 +9,13 @@ import PriceReport from './pages/PriceReport/PriceReport'
 import './App.css'
 
 // Al cambiar de página se vuelve arriba, como en una navegación normal.
+// useLayoutEffect: sube antes de pintar, así la página nueva nunca se ve un
+// instante con el scroll de la anterior (y el anillo de Inicio se dibuja ya
+// en su posición correcta).
 function ScrollToTop() {
   const { pathname } = useLocation()
   // Con llaves: en Chrome scrollTo() devuelve una Promise, y un efecto solo puede devolver su limpieza.
-  useEffect(() => {
+  useLayoutEffect(() => {
     window.scrollTo(0, 0)
   }, [pathname])
   return null

@@ -47,6 +47,10 @@
   flex-direction: column;
   gap: var(--space-md);
 }
+.price-report__line{
+    border-top: 1px solid #fff ;
+    width: 100%
+}
 
 .price-report__block--scrap {
   gap: var(--space-sm);

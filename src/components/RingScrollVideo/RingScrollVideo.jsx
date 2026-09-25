@@ -1,50 +1,35 @@
-import { useEffect, useRef } from 'react'
+import { useLayoutEffect, useRef } from 'react'
 import { prefersReducedMotion } from '../../lib/pixelDissolve'
 import { ringAngle } from '../../lib/ringAngle'
+import { FRAME_COUNT, ringFrames } from '../../lib/ringFrames'
 import AtelierCard from '../cards/AtelierCard/AtelierCard'
 import PresenceCard from '../cards/PresenceCard/PresenceCard'
 import ProvenanceCard from '../cards/ProvenanceCard/ProvenanceCard'
 import SpecsCard from '../cards/SpecsCard/SpecsCard'
 import './RingScrollVideo.css'
 
-// BASE_URL respeta el `base` de vite.config.js (necesario en GitHub Pages).
-const VIDEO_SRC = `${import.meta.env.BASE_URL}ring-scroll.mp4`
-
 /**
- * Video de fondo "ring scroll": el anillo gira según el scroll de la sección
- * (el tiempo del video se mueve con el scroll en vez de reproducirse solo),
- * con las tarjetas de información flotando encima.
+ * Fondo "ring scroll": el anillo gira según el scroll de la sección, con las
+ * tarjetas de información flotando encima. En lugar de mover el tiempo de un
+ * <video> (cada salto obliga a buscar y decodificar, y en móviles se traba),
+ * se dibuja en un canvas el fotograma que toca de una secuencia de imágenes
+ * ya decodificadas.
  */
 function RingScrollVideo() {
   const sectionRef = useRef(null)
-  const videoRef = useRef(null)
+  const canvasRef = useRef(null)
   const glintRef = useRef(null)
 
-  useEffect(() => {
+  // useLayoutEffect: el primer fotograma se dibuja antes de que el navegador pinte.
+  useLayoutEffect(() => {
     const section = sectionRef.current
-    const video = videoRef.current
+    const canvas = canvasRef.current
     const glint = glintRef.current
-    const instant = prefersReducedMotion()
-    let current = 0
+    const ctx = canvas.getContext('2d')
+    const ease = prefersReducedMotion() ? 1 : 0.18
     let frameId = null
-    let blobUrl = null
-    let cancelled = false
-
-    // Cargar el video completo en memoria hace que saltar de un frame a otro
-    // sea inmediato (sin peticiones de rango al servidor en cada seek).
-    fetch(VIDEO_SRC)
-      .then((res) => (res.ok ? res.blob() : Promise.reject(new Error(res.statusText))))
-      .then((blob) => {
-        if (cancelled) return
-        const time = video.currentTime
-        blobUrl = URL.createObjectURL(blob)
-        video.src = blobUrl
-        video.currentTime = time
-      })
-      .catch(() => {})
-
-    const getDuration = () =>
-      Number.isFinite(video.duration) && video.duration > 0 ? video.duration : 10
+    let drawn = -1
+    let lastAngle = null
 
     const getScrollProgress = () => {
       const rect = section.getBoundingClientRect()
@@ -53,49 +38,73 @@ function RingScrollVideo() {
     }
 
     // Si el usuario eligió una faceta, manda ese ángulo; si no, el scroll.
-    const getTargetTime = () => {
+    // Devuelve la posición en fotogramas (con decimales).
+    const getTarget = () => {
       const manual = ringAngle.getManual()
       return manual === null
-        ? getScrollProgress() * (getDuration() - 0.05)
-        : (manual / 360) * getDuration()
+        ? getScrollProgress() * (FRAME_COUNT - 1)
+        : (manual / 360) * FRAME_COUNT
     }
 
-    const tick = () => {
-      const target = getTargetTime()
-      current += (target - current) * (instant ? 1 : 0.18)
-      if (Math.abs(target - current) < 0.001) current = target
-
-      if (!video.seeking && video.readyState >= 1 && Math.abs(video.currentTime - current) > 1 / 60) {
-        video.currentTime = current
+    // Mientras el fotograma pedido se descarga se muestra el más cercano ya listo.
+    const draw = (index) => {
+      const ready = ringFrames.nearestReady(index)
+      if (ready === -1 || ready === drawn) return
+      const img = ringFrames.get(ready)
+      if (canvas.width !== img.naturalWidth || canvas.height !== img.naturalHeight) {
+        canvas.width = img.naturalWidth
+        canvas.height = img.naturalHeight
       }
+      ctx.drawImage(img, 0, 0)
+      drawn = ready
+    }
 
-      const angle = ((current / getDuration()) * 360) % 360
-      ringAngle.set(angle)
-      glint.style.setProperty('--glint', `${(100 - (angle / 360) * 100).toFixed(1)}%`)
+    // Si los fotogramas ya estaban en memoria (se vuelve de otra página), el
+    // anillo aparece dibujado desde el primer pintado.
+    let current = getTarget()
+    ringFrames.load(Math.round(current))
+    draw(Math.round(current))
+
+    const tick = () => {
+      const target = getTarget()
+      current += (target - current) * ease
+      if (Math.abs(target - current) < 0.01) current = target
+      draw(Math.round(current))
+
+      // Solo se escribe en el DOM cuando el ángulo cambia de verdad.
+      const angle = ((current / FRAME_COUNT) * 360) % 360
+      if (angle !== lastAngle) {
+        lastAngle = angle
+        ringAngle.set(angle)
+        // Mover el brillo con transform lo deja en la GPU, sin repintar cada frame.
+        glint.style.transform = `translate3d(${(-60 * (1 - angle / 360)).toFixed(2)}%, 0, 0)`
+      }
 
       frameId = requestAnimationFrame(tick)
     }
-    frameId = requestAnimationFrame(tick)
+
+    // El bucle solo corre mientras la sección está cerca de la pantalla; al
+    // volver se coloca directamente en su sitio en vez de girar hasta él.
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        cancelAnimationFrame(frameId)
+        frameId = null
+        if (entry.isIntersecting) {
+          current = getTarget()
+          frameId = requestAnimationFrame(tick)
+        }
+      },
+      { rootMargin: '25% 0px' },
+    )
+    observer.observe(section)
 
     const onScroll = () => ringAngle.clearManual()
     window.addEventListener('scroll', onScroll, { passive: true })
 
-    // iOS Safari no deja mover currentTime hasta un play() iniciado por el usuario.
-    const unlock = () => {
-      video
-        .play()
-        ?.then(() => video.pause())
-        .catch(() => {})
-      window.removeEventListener('touchstart', unlock)
-    }
-    window.addEventListener('touchstart', unlock, { passive: true })
-
     return () => {
-      cancelled = true
       cancelAnimationFrame(frameId)
+      observer.disconnect()
       window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('touchstart', unlock)
-      if (blobUrl) URL.revokeObjectURL(blobUrl)
     }
   }, [])
 
@@ -106,14 +115,11 @@ function RingScrollVideo() {
     >
       <div className="ring-scroll__stage">
         <div className="ring-scroll__frame">
-          <video
-            ref={videoRef}
+          <canvas
+            ref={canvasRef}
+            role="img"
             aria-label="Anillo El Abismo Verde en rotación - Alta Joyería"
-            className="ring-scroll__video"
-            muted
-            playsInline
-            preload="auto"
-            src={VIDEO_SRC}
+            className="ring-scroll__canvas"
           />
           <div ref={glintRef} className="ring-scroll__glint" />
         </div>

@@ -5,11 +5,13 @@ import './ProductHeader.css'
 function ProductHeader() {
   const angleRef = useRef(null)
 
-  // Se escribe directo en el DOM para no re-renderizar en cada frame.
+  // Se escribe directo en el DOM para no re-renderizar en cada frame, y solo
+  // si el texto cambia (cada escritura obliga a recalcular el layout).
   useEffect(
     () =>
       ringAngle.subscribe((value) => {
-        if (angleRef.current) angleRef.current.textContent = formatAngle(value)
+        const text = formatAngle(value)
+        if (angleRef.current && angleRef.current.textContent !== text) angleRef.current.textContent = text
       }),
     [],
   )
