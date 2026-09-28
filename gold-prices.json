@@ -1,0 +1,68 @@
+{
+  "updatedAt": "2026-09-28T15:42:27.499Z",
+  "spotPriceUSD": 4121.4831899126,
+  "rows": [
+    {
+      "karat": "10k",
+      "purity": "417‰",
+      "buyUSD": 50.26,
+      "sellUSD": 55.26
+    },
+    {
+      "karat": "14k",
+      "purity": "585‰",
+      "buyUSD": 72.52,
+      "sellUSD": 77.52
+    },
+    {
+      "karat": "18k",
+      "purity": "750‰",
+      "buyUSD": 94.38,
+      "sellUSD": 99.38
+    },
+    {
+      "karat": "22k",
+      "purity": "916‰",
+      "buyUSD": 116.38,
+      "sellUSD": 121.38
+    },
+    {
+      "karat": "24k",
+      "purity": "999‰",
+      "buyUSD": 127.38,
+      "sellUSD": 132.38
+    }
+  ],
+  "scrapRows": [
+    {
+      "karat": "10k",
+      "purity": "417‰",
+      "buyUSD": 50.26
+    },
+    {
+      "karat": "12k",
+      "purity": "500‰",
+      "buyUSD": 61.25
+    },
+    {
+      "karat": "14k",
+      "purity": "585‰",
+      "buyUSD": 72.52
+    },
+    {
+      "karat": "18k",
+      "purity": "750‰",
+      "buyUSD": 94.38
+    },
+    {
+      "karat": "22k",
+      "purity": "916‰",
+      "buyUSD": 116.38
+    },
+    {
+      "karat": "24k",
+      "purity": "999‰",
+      "buyUSD": 127.38
+    }
+  ]
+}
