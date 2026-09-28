@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "deploy": "gh-pages -d dist",
+    "gold:update": "node scripts/update-gold-prices.js",
     "initial": "ssh-add ~/.ssh/web_project_around_auth "
   },
   "dependencies": {

@@ -1,11 +1,40 @@
+import { useEffect, useState } from 'react'
 import PriceTable from '../../components/PriceTable/PriceTable'
-import { GOLD_PRICES, SCRAP_PRICES, WHATSAPP_URL } from '../../data/content'
+import { GOLD_PRICES, GOLD_PRICES_JSON_URL, GOLD_PRICES_UPDATED_AT, SCRAP_PRICES, WHATSAPP_URL } from '../../data/content'
 import { formatPrice } from '../../lib/formatPrice'
 import './PriceReport.css'
 
 // Precios del oro por gramo en USD: joya como prenda (compra y venta) y joya como chatarra (solo compra).
-// Hoy muestra las filas vacías; más adelante `rows`, `scrapRows` y `updatedAt` vendrán de la API.
-function PriceReport({ rows = GOLD_PRICES, scrapRows = SCRAP_PRICES, updatedAt = null }) {
+// `npm run gold:update` calcula estos precios una vez al día y los publica como JSON
+// (ver scripts/update-gold-prices.js); aquí solo se leen. Si la petición falla, se quedan las filas en "—".
+function PriceReport() {
+  const [rows, setRows] = useState(GOLD_PRICES)
+  const [scrapRows, setScrapRows] = useState(SCRAP_PRICES)
+  const [updatedAt, setUpdatedAt] = useState(GOLD_PRICES_UPDATED_AT)
+
+  useEffect(() => {
+    let cancelled = false
+
+    fetch(GOLD_PRICES_JSON_URL)
+      .then((response) => {
+        if (!response.ok) throw new Error('No se pudo obtener el reporte de precios')
+        return response.json()
+      })
+      .then((data) => {
+        if (cancelled) return
+        setRows(data.rows ?? GOLD_PRICES)
+        setScrapRows(data.scrapRows ?? SCRAP_PRICES)
+        setUpdatedAt(data.updatedAt ? new Date(data.updatedAt) : null)
+      })
+      .catch((error) => {
+        console.error('No se pudo cargar el precio del oro:', error)
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
   return (
     <section className="price-report">
       <div className="price-report__inner">

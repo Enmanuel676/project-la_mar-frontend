@@ -8,6 +8,9 @@ node_modules
 dist
 dist-ssr
 
+# Generado por scripts/update-gold-prices.js
+public/gold-prices.json
+
 # Logs
 logs
 *.log
