@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>La Mar · El Abismo Verde</title>
+    <script type="text/javascript">
+      // Truco de "Single Page Apps for GitHub Pages": https://github.com/rafgraph/spa-github-pages
+      // GitHub Pages solo sirve archivos estáticos, así que entrar directo o recargar en
+      // /project-la_mar-frontend/catalogo devuelve este 404. Aquí redirigimos a index.html
+      // codificando la ruta real en el query string; index.html la restaura con history.replaceState.
+      var pathSegmentsToKeep = 1
+
+      var l = window.location
+      l.replace(
+        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+          l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
+          l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
+          (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+          l.hash,
+      )
+    </script>
+  </head>
+  <body></body>
+</html>

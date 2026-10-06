@@ -95,7 +95,7 @@
 
 .catalog-card__prices {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.5rem;
   margin-top: auto;
   padding-top: var(--space-sm);
@@ -113,10 +113,6 @@
   font-family: var(--font-mono);
   letter-spacing: var(--tracking-label-md);
   color: var(--color-primary);
-}
-
-.catalog-card__price--usd {
-  color: var(--color-secondary);
 }
 
 /* Tableta: 2 columnas */

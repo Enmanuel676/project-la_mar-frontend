@@ -1,8 +1,10 @@
 /* Tabla sencilla de precios (quilataje · USD) */
 .price-list {
+  width: 80%;
   overflow-x: auto;
   border-radius: var(--radius-xl);
   background: var(--color-surface-container-low);
+  margin: auto;
 }
 
 .price-list__table {
@@ -42,12 +44,6 @@
 .price-list__karat-name {
   font-weight: 500;
   color: var(--color-on-surface);
-}
-
-.price-list__purity {
-  margin-left: 0.5rem;
-  font: var(--type-caption);
-  color: var(--color-outline);
 }
 
 .price-list__table td {

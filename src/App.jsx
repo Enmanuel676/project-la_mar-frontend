@@ -1,10 +1,11 @@
 import { useLayoutEffect } from 'react'
-import { HashRouter, Route, Routes, useLocation } from 'react-router'
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router'
 import AmbientGlow from './components/AmbientGlow/AmbientGlow'
 import Footer from './components/Footer/Footer'
 import Navbar from './components/Navbar/Navbar'
 import Catalog from './pages/Catalog/Catalog'
 import Home from './pages/Home/Home'
+import NotFound from './pages/NotFound/NotFound'
 import PriceReport from './pages/PriceReport/PriceReport'
 import './App.css'
 
@@ -21,10 +22,12 @@ function ScrollToTop() {
   return null
 }
 
-// HashRouter (#/catalogo) funciona en GitHub Pages sin configurar el servidor.
+// BrowserRouter da URLs limpias (/catalogo en vez de /#/catalogo). En GitHub Pages,
+// entrar directo o recargar en una de estas rutas requiere el truco de public/404.html
+// (ver ese archivo y el script en index.html que restaura la URL real).
 function App() {
   return (
-    <HashRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <ScrollToTop />
       <Navbar />
       <main className="app-main">
@@ -34,12 +37,12 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/catalogo" element={<Catalog />} />
             <Route path="/informes-precios" element={<PriceReport />} />
-            <Route path="*" element={<Home />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
       </main>
       <Footer />
-    </HashRouter>
+    </BrowserRouter>
   )
 }
 

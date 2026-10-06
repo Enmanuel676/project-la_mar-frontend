@@ -69,6 +69,8 @@
 
 /* Tabla completa (compra y venta) */
 .price-report__full {
+  width: 80%;
+  margin-inline: auto;
   overflow-x: auto;
   border-radius: var(--radius-xl);
   background: var(--color-surface-container-low);
@@ -107,12 +109,6 @@
 .price-table__karat-name {
   font-weight: 500;
   color: var(--color-on-surface);
-}
-
-.price-table__purity {
-  margin-left: 0.5rem;
-  font: var(--type-caption);
-  color: var(--color-outline);
 }
 
 .price-table td {
@@ -177,6 +173,7 @@
   .price-report__split {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 1rem;
   }
 }

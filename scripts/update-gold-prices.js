@@ -16,24 +16,33 @@ const GRAMS_PER_TROY_OUNCE = 31.1034768
 const BUY_DISCOUNT_USD = 5
 
 const GOLD_PRICES = [
-  { karat: '10k', purity: '417‰' },
-  { karat: '14k', purity: '585‰' },
-  { karat: '18k', purity: '750‰' },
-  { karat: '22k', purity: '916‰' },
-  { karat: '24k', purity: '999‰' },
+  { karat: '10k' },
+  { karat: '14k' },
+  { karat: '18k' },
+  { karat: '22k' },
+  { karat: '24k' },
 ]
 
 const SCRAP_PRICES = [
-  { karat: '10k', purity: '417‰' },
-  { karat: '12k', purity: '500‰' },
-  { karat: '14k', purity: '585‰' },
-  { karat: '18k', purity: '750‰' },
-  { karat: '22k', purity: '916‰' },
-  { karat: '24k', purity: '999‰' },
+  { karat: '10k' },
+  { karat: '12k' },
+  { karat: '14k' },
+  { karat: '18k' },
+  { karat: '22k' },
+  { karat: '24k' },
 ]
 
-function purityToFraction(purity) {
-  return parseInt(purity, 10) / 1000
+const KARAT_FRACTIONS = {
+  '10k': 417 / 1000,
+  '12k': 500 / 1000,
+  '14k': 585 / 1000,
+  '18k': 750 / 1000,
+  '22k': 916 / 1000,
+  '24k': 999 / 1000,
+}
+
+function karatToFraction(karat) {
+  return KARAT_FRACTIONS[karat] ?? (parseInt(karat, 10) / 24)
 }
 
 function round2(value) {
@@ -58,17 +67,19 @@ async function fetchGoldSpotPriceUSD() {
 
 function buildGoldRows(rows, pricePerGramPure) {
   return rows.map((row) => {
-    const sellUSD = round2(pricePerGramPure * purityToFraction(row.purity))
+    const fraction = karatToFraction(row.karat)
+    const sellUSD = round2(pricePerGramPure * fraction)
     const buyUSD = Math.max(round2(sellUSD - BUY_DISCOUNT_USD), 0)
-    return { ...row, buyUSD, sellUSD }
+    return { karat: row.karat, buyUSD, sellUSD }
   })
 }
 
 function buildScrapRows(rows, pricePerGramPure) {
   return rows.map((row) => {
-    const sellUSD = pricePerGramPure * purityToFraction(row.purity)
+    const fraction = karatToFraction(row.karat)
+    const sellUSD = pricePerGramPure * fraction
     const buyUSD = Math.max(round2(sellUSD - BUY_DISCOUNT_USD), 0)
-    return { ...row, buyUSD }
+    return { karat: row.karat, buyUSD }
   })
 }
 

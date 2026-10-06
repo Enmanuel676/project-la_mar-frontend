@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef } from 'react'
 import { prefersReducedMotion } from '../../lib/pixelDissolve'
 import { ringAngle } from '../../lib/ringAngle'
-import { FRAME_COUNT, ringFrames } from '../../lib/ringFrames'
+import { ringFrames } from '../../lib/ringFrames'
 import AtelierCard from '../cards/AtelierCard/AtelierCard'
 import PresenceCard from '../cards/PresenceCard/PresenceCard'
 import ProvenanceCard from '../cards/ProvenanceCard/ProvenanceCard'
@@ -13,7 +13,8 @@ import './RingScrollVideo.css'
  * tarjetas de información flotando encima. En lugar de mover el tiempo de un
  * <video> (cada salto obliga a buscar y decodificar, y en móviles se traba),
  * se dibuja en un canvas el fotograma que toca de una secuencia de imágenes
- * ya decodificadas.
+ * ya decodificadas. La secuencia es la versión que Inicio eligió según la
+ * velocidad de conexión (ringFrames.selectTier) antes de montar este componente.
  */
 function RingScrollVideo() {
   const sectionRef = useRef(null)
@@ -26,6 +27,7 @@ function RingScrollVideo() {
     const canvas = canvasRef.current
     const glint = glintRef.current
     const ctx = canvas.getContext('2d')
+    const count = ringFrames.getCount()
     const ease = prefersReducedMotion() ? 1 : 0.18
     let frameId = null
     let drawn = -1
@@ -42,8 +44,8 @@ function RingScrollVideo() {
     const getTarget = () => {
       const manual = ringAngle.getManual()
       return manual === null
-        ? getScrollProgress() * (FRAME_COUNT - 1)
-        : (manual / 360) * FRAME_COUNT
+        ? getScrollProgress() * (count - 1)
+        : (manual / 360) * count
     }
 
     // Mientras el fotograma pedido se descarga se muestra el más cercano ya listo.
@@ -59,6 +61,18 @@ function RingScrollVideo() {
       drawn = ready
     }
 
+    // Versión low: una imagen fija, sin scroll motion. Se dibuja una vez, en
+    // cuanto llega (o antes del primer pintado, si ya estaba en memoria).
+    if (count === 1) {
+      let disposed = false
+      ringFrames.whenReady().then(() => {
+        if (!disposed) draw(0)
+      })
+      return () => {
+        disposed = true
+      }
+    }
+
     // Si los fotogramas ya estaban en memoria (se vuelve de otra página), el
     // anillo aparece dibujado desde el primer pintado.
     let current = getTarget()
@@ -72,7 +86,7 @@ function RingScrollVideo() {
       draw(Math.round(current))
 
       // Solo se escribe en el DOM cuando el ángulo cambia de verdad.
-      const angle = ((current / FRAME_COUNT) * 360) % 360
+      const angle = ((current / count) * 360) % 360
       if (angle !== lastAngle) {
         lastAngle = angle
         ringAngle.set(angle)

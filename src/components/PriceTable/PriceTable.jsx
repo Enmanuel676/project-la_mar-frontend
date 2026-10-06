@@ -22,7 +22,6 @@ function PriceTable({ title, rows, usdKey }) {
             <tr key={row.karat}>
               <th scope="row" className="price-list__karat">
                 <span className="price-list__karat-name">{row.karat}</span>
-                <span className="price-list__purity">{row.purity}</span>
               </th>
               <td>{formatPrice(row[usdKey], 'USD')}</td>
             </tr>

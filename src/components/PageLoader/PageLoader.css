@@ -1,0 +1,74 @@
+/* Pop-up modal de carga a pantalla completa con fondo desenfocado (blur idéntico a la barra de navegación) */
+.page-loader-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--margin-mobile);
+  background: color-mix(in srgb, var(--color-surface-container-lowest) 75%, transparent);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  opacity: 1;
+  transition: opacity 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.page-loader-overlay--closing {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.page-loader-modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 2.25rem 3rem;
+  border-radius: var(--radius-xl);
+  background: color-mix(in srgb, var(--color-surface-container-low) 85%, transparent);
+  border: 1px solid var(--color-divider);
+  box-shadow: var(--shadow-2xl);
+  text-align: center;
+  transform: scale(1);
+  transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.page-loader-overlay--closing .page-loader-modal {
+  transform: scale(0.95);
+}
+
+.page-loader__spinner {
+  width: 48px;
+  height: 48px;
+  border: 3.5px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: page-loader-spin 0.85s linear infinite;
+}
+
+@keyframes page-loader-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.page-loader__title {
+  font: var(--type-headline-md);
+  letter-spacing: var(--tracking-headline-xl);
+  color: var(--color-on-surface);
+  margin: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-loader__spinner {
+    animation-duration: 2s;
+  }
+  .page-loader-overlay,
+  .page-loader-modal {
+    transition: none;
+  }
+}

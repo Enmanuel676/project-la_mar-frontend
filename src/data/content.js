@@ -18,14 +18,10 @@ export const NAV_LINKS = [
   { path: 'contacto', label: 'Contacto', href: WHATSAPP_URL },
 ]
 
-// Datos de ejemplo hasta conectar la API de administración del catálogo.
-// `image` puede ser null: la tarjeta muestra un marcador en su lugar.
-export const CATALOG_ITEMS = [
-  { id: 'ejemplo-1', name: 'Artículo de ejemplo 1', description: 'Anillo · Oro 18k', image: null, priceUSD: null },
-  { id: 'ejemplo-2', name: 'Artículo de ejemplo 2', description: 'Cadena · Oro 14k', image: null, priceUSD: null },
-  { id: 'ejemplo-3', name: 'Artículo de ejemplo 3', description: 'Aretes · Oro 18k', image: null, priceUSD: null },
-  { id: 'ejemplo-4', name: 'Artículo de ejemplo 4', description: 'Pulsera · Oro 10k', image: null, priceUSD: null },
-]
+// API del catálogo (backend). Devuelve solo los artículos publicados desde el panel de
+// administración. En local es el backend de `npm run dev`; al pasar al servidor con Nginx,
+// se define VITE_API_URL con la dirección pública (por ejemplo https://tudominio.com/api).
+export const CATALOG_API_URL = `${import.meta.env.VITE_API_URL ?? 'http://localhost:3000/api'}/public/articles`
 
 // Alpha Vantage no envía cabeceras CORS, así que el precio del oro no se puede pedir
 // desde el navegador. `npm run gold:update` (ver scripts/update-gold-prices.js) lo pide
@@ -41,19 +37,19 @@ export const GOLD_PRICES_JSON_URL = `${import.meta.env.BASE_URL}gold-prices.json
 export const GOLD_PRICES_UPDATED_AT = new Date('2026-09-28T15:10:43Z')
 
 export const GOLD_PRICES = [
-  { karat: '10k', purity: '417‰', buyUSD: 50.26, sellUSD: 55.26 },
-  { karat: '14k', purity: '585‰', buyUSD: 72.53, sellUSD: 77.53 },
-  { karat: '18k', purity: '750‰', buyUSD: 94.4, sellUSD: 99.4 },
-  { karat: '22k', purity: '916‰', buyUSD: 116.4, sellUSD: 121.4 },
-  { karat: '24k', purity: '999‰', buyUSD: 127.4, sellUSD: 132.4 },
+  { karat: '10k', buyUSD: 50.26, sellUSD: 55.26 },
+  { karat: '14k', buyUSD: 72.53, sellUSD: 77.53 },
+  { karat: '18k', buyUSD: 94.4, sellUSD: 99.4 },
+  { karat: '22k', buyUSD: 116.4, sellUSD: 121.4 },
+  { karat: '24k', buyUSD: 127.4, sellUSD: 132.4 },
 ]
 
 // Precios de compra de oro como chatarra (por gramo). La joyería solo compra.
 export const SCRAP_PRICES = [
-  { karat: '10k', purity: '417‰', buyUSD: 50.26 },
-  { karat: '12k', purity: '500‰', buyUSD: 61.26 },
-  { karat: '14k', purity: '585‰', buyUSD: 72.53 },
-  { karat: '18k', purity: '750‰', buyUSD: 94.4 },
-  { karat: '22k', purity: '916‰', buyUSD: 116.4 },
-  { karat: '24k', purity: '999‰', buyUSD: 127.4 },
+  { karat: '10k', buyUSD: 50.26 },
+  { karat: '12k', buyUSD: 61.26 },
+  { karat: '14k', buyUSD: 72.53 },
+  { karat: '18k', buyUSD: 94.4 },
+  { karat: '22k', buyUSD: 116.4 },
+  { karat: '24k', buyUSD: 127.4 },
 ]

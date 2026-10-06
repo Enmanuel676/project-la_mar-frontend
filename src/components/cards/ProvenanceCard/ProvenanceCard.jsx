@@ -10,7 +10,7 @@ function ProvenanceCard() {
       </h2>
       <p className="provenance-card__text">
         Nacida en las fallas minerales de Muzo, esta esmeralda natural presenta una rara transparencia
-        abisal conocida como «jardín secreto». Montada sobre un cuerpo esculpido en oro rosa 750‰ con
+        abisal conocida como «jardín secreto». Montada sobre un cuerpo esculpido en oro rosa 18k con
         acabado cepillado a mano, su color verde mar resuena con la calidez cobriza de la aleación de la casa.
       </p>
       <div className="provenance-card__stats">
@@ -20,7 +20,7 @@ function ProvenanceCard() {
         </div>
         <div className="provenance-card__stat">
           <span className="provenance-card__stat-label">Aleación</span>
-          <span className="provenance-card__stat-value provenance-card__stat-value--accent">Oro Rosa 750‰</span>
+          <span className="provenance-card__stat-value provenance-card__stat-value--accent">Oro Rosa 18k</span>
         </div>
       </div>
       <div className="provenance-card__cert">

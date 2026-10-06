@@ -80,7 +80,6 @@ function PriceReport() {
                   <tr key={row.karat}>
                     <th scope="row" className="price-table__karat">
                       <span className="price-table__karat-name">{row.karat}</span>
-                      <span className="price-table__purity">{row.purity}</span>
                     </th>
                     <td>{formatPrice(row.buyUSD, 'USD')}</td>
                     <td>{formatPrice(row.sellUSD, 'USD')}</td>
