@@ -3,8 +3,8 @@
 // página, en segundo plano mientras se ve el cargador, y vale el primer resultado.
 
 // Umbrales de velocidad de bajada, en Mbps.
-const NORMAL_MIN_MBPS = 2.5 // 5 Mbps o más: el giro completo
-const MEDIUM_MIN_MBPS = 1 // de 2 a 5 Mbps: la versión ligera; por debajo, la imagen fija
+const NORMAL_MIN_MBPS = 1.25 // 5 Mbps o más: el giro completo
+const MEDIUM_MIN_MBPS = 0.6 // de 2 a 5 Mbps: la versión ligera; por debajo, la imagen fija
 // Si no se pudo medir (sin red, archivo no encontrado), la versión intermedia.
 const FALLBACK_TIER = 'medium'
 
