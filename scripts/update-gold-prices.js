@@ -9,7 +9,8 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const OUTPUT_PATH = path.join(__dirname, '..', 'public', 'gold-prices.json')
+// En el servidor, GOLD_PRICES_PATH apunta al archivo que sirve Nginx.
+const OUTPUT_PATH = process.env.GOLD_PRICES_PATH || path.join(__dirname, '..', 'public', 'gold-prices.json')
 const ALPHA_VANTAGE_API_KEY = process.env.ALPHA_VANTAGE_API_KEY || 'DA3MM4ZAJDRESJYI'
 
 const GRAMS_PER_TROY_OUNCE = 31.1034768
@@ -123,4 +124,5 @@ function scheduleDaily() {
 // Petición inicial para tener datos de inmediato durante el desarrollo local,
 // y luego una sola petición diaria a las 9:00 a.m.
 updateGoldPrices()
-scheduleDaily()
+// Con --once hace una sola petición y termina (temporizador de systemd en el servidor).
+if (!process.argv.includes('--once')) scheduleDaily()
