@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
-import FacetsGallery from '../../components/FacetsGallery/FacetsGallery'
+
+import ContactCta from '../../components/ContactCta/ContactCta'
+import HomeHeader from '../../components/HomeHeader/HomeHeader'
 import PageLoader from '../../components/PageLoader/PageLoader'
-import PrivateSalon from '../../components/PrivateSalon/PrivateSalon'
-import ProductHeader from '../../components/ProductHeader/ProductHeader'
-import RingScrollVideo from '../../components/RingScrollVideo/RingScrollVideo'
-import { ATELIER_IMAGE, PRESENCE_IMAGE } from '../../data/content'
+import RingScroll from '../../components/RingScroll/RingScroll'
+import { APPRAISAL_IMAGE, CRAFT_IMAGE } from '../../data/content'
 import { detectNetworkTier } from '../../lib/networkTier'
 import { ringFrames } from '../../lib/ringFrames'
 import './Home.css'
@@ -12,8 +12,8 @@ import './Home.css'
 const HOME_KEY_IMAGES = [
   'https://lh3.googleusercontent.com/aida-public/AB6AXuAQXIsmsDfPF-ZURNG1rSt_Tbk6Ju2nWt3AVi7J9YywoIimiLEnsRSM8UdgWQ6eVG2qPc8KR_JJK513_EsBPC_lC8d7hb8lBUzMJYbjAW230XB6FIj_HKc8J8o7ctTBgH44PGKGtWUHaAxnZxL6_RpXoFXtcRx5pHwGgiaL90nEsSSX5Xh_suNx6h6-Yr-z5GZW-lH1nuJeMLw6kaO3N7bLZzVm16yzY1rKYSKos1-Gk7uVqABGf3hucAODP5NfApJQXA',
   'https://lh3.googleusercontent.com/aida-public/AB6AXuBeZtz4sNGF2MLUE8fUkKTI49hqQq6FvsgS2EYC1dVomUsaSY7HnFI6902DNjY3wNibjqGnIup5Z5QUf00e3F38vnyCz-DNN1is6MTICn3RjnA0ctX8zomQ7G0KjQlUhrq1QcknIm6EiAZyHxIlV10WIo5-TvTuievaXK_KVmB6hxNX7uPHhoJwX6fyr-gSieTUOGyHscixovwK5_fl3JkqLkWDw_qHl1FyI7CdQ37tHz1K1LjsID68P__Id5oVe0Aetg',
-  ATELIER_IMAGE,
-  PRESENCE_IMAGE,
+  CRAFT_IMAGE,
+  APPRAISAL_IMAGE,
 ]
 
 // El cargador se quita en cuanto todo está listo. Si no, a los 3 s, siempre que el
@@ -49,7 +49,7 @@ function documentReady() {
     : new Promise((resolve) => window.addEventListener('load', resolve, { once: true }))
 }
 
-// Página de inicio (landing): presentación del anillo con el video por scroll.
+// Página de inicio (landing): presentación del anillo que gira con el scroll.
 function Home() {
   const [tier, setTier] = useState(() => ringFrames.getTier())
   // Al volver a Inicio con el anillo ya en memoria no hace falta el cargador.
@@ -89,14 +89,14 @@ function Home() {
   return (
     <>
       <PageLoader isLoading={isLoading} />
-      <ProductHeader />
+      <HomeHeader />
       {/* Lo que descarga imágenes se monta después de medir: esas descargas le quitarían
           ancho de banda a la medición y saldría más baja de lo real. */}
       {tier && (
         <>
-          <RingScrollVideo />
-          <FacetsGallery />
-          <PrivateSalon />
+          <RingScroll />
+
+          <ContactCta />
         </>
       )}
     </>

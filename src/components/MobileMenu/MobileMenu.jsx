@@ -81,6 +81,30 @@ function MobileMenu({ open, onClose, returnFocusRef }) {
     returnFocusRef.current?.focus({ preventScroll: true })
   }, [open, animateTo, returnFocusRef])
 
+  // Bloquear el scroll del fondo cuando el menú móvil está abierto. Solo en <html>: con
+  // overflow: hidden también en <body>, el body pasa a ser el contenedor de scroll, el
+  // escenario sticky del anillo (RingScroll) se suelta y salta fuera de su sitio.
+  useEffect(() => {
+    if (!open) return
+
+    const root = document.documentElement
+    const previousOverflow = root.style.overflow
+    root.style.overflow = 'hidden'
+
+    const preventTouch = (e) => {
+      if (panelRef.current && !panelRef.current.contains(e.target)) {
+        e.preventDefault()
+      }
+    }
+
+    document.addEventListener('touchmove', preventTouch, { passive: false })
+
+    return () => {
+      root.style.overflow = previousOverflow
+      document.removeEventListener('touchmove', preventTouch)
+    }
+  }, [open])
+
   useEffect(() => {
     if (!open) return
     const onKeyDown = (event) => event.key === 'Escape' && onClose()

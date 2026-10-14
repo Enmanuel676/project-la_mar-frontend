@@ -6,12 +6,12 @@ import './PriceTable.css'
 // (p. ej. sellUSD para "Vendemos" o buyUSD para "Compramos").
 function PriceTable({ title, rows, usdKey }) {
   return (
-    <div className="price-list">
-      <table className="price-list__table">
-        <caption className="price-list__title">{title}</caption>
+    <div className="price-table">
+      <table className="price-table__table">
+        <caption className="price-table__title">{title}</caption>
         <thead>
           <tr>
-            <th scope="col" className="price-list__karat">
+            <th scope="col" className="price-table__karat">
               Quilataje
             </th>
             <th scope="col">USD</th>
@@ -20,8 +20,8 @@ function PriceTable({ title, rows, usdKey }) {
         <tbody>
           {rows.map((row) => (
             <tr key={row.karat}>
-              <th scope="row" className="price-list__karat">
-                <span className="price-list__karat-name">{row.karat}</span>
+              <th scope="row" className="price-table__karat">
+                <span className="price-table__karat-name">{row.karat}</span>
               </th>
               <td>{formatPrice(row[usdKey], 'USD')}</td>
             </tr>

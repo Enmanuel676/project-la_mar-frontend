@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import ImageModal from '../../components/ImageModal/ImageModal'
 import PageLoader from '../../components/PageLoader/PageLoader'
 import { CATALOG_API_URL } from '../../data/content'
 import { formatPrice } from '../../lib/formatPrice'
@@ -23,7 +24,8 @@ function CardImage({ alt, src }) {
 function Catalog() {
   const [items, setItems] = useState([])
   const [status, setStatus] = useState('loading') // 'loading' | 'ready' | 'error'
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
+  const [maximizedImage, setMaximizedImage] = useState(null)
 
   useEffect(() => {
     // `cancelled` evita actualizar el estado si la persona sale de la página antes de que
@@ -65,7 +67,7 @@ function Catalog() {
         if (!cancelled) setIsLoading(false)
       })
       .catch((error) => {
-        console.error('No se pudo cargar el catálogo:', error)
+        console.warn('Backend de catálogo no disponible:', error.message)
         if (!cancelled) {
           setStatus('error')
           setIsLoading(false)
@@ -97,8 +99,38 @@ function Catalog() {
           <ul className="catalog__grid">
             {items.map((item) => (
               <li key={item.id} className="catalog-card">
-                <div className="catalog-card__media">
+                <div
+                  className="catalog-card__media"
+                  onClick={() =>
+                    item.image &&
+                    setMaximizedImage({
+                      src: item.image,
+                      alt: item.name,
+                      title: item.name,
+                      subtitle: `${item.currency} ${formatPrice(item.price, item.currency)}`,
+                    })
+                  }
+                  role={item.image ? 'button' : undefined}
+                  tabIndex={item.image ? 0 : undefined}
+                  onKeyDown={(e) =>
+                    item.image &&
+                    (e.key === 'Enter' || e.key === ' ') &&
+                    setMaximizedImage({
+                      src: item.image,
+                      alt: item.name,
+                      title: item.name,
+                      subtitle: `${item.currency} ${formatPrice(item.price, item.currency)}`,
+                    })
+                  }
+                  title={item.image ? 'Toca para maximizar la imagen' : undefined}
+                  aria-label={item.image ? `Maximizar imagen de ${item.name}` : undefined}
+                >
                   <CardImage alt={item.name} src={item.image} />
+                  {item.image && (
+                    <span className="catalog-card__zoom-badge" aria-hidden="true">
+                      <span className="material-symbols-outlined">zoom_in</span>
+                    </span>
+                  )}
                 </div>
                 <div className="catalog-card__body">
                   <h3 className="catalog-card__name">{item.name}</h3>
@@ -115,6 +147,12 @@ function Catalog() {
           </ul>
         )}
       </div>
+
+      <ImageModal
+        isOpen={Boolean(maximizedImage)}
+        onClose={() => setMaximizedImage(null)}
+        image={maximizedImage}
+      />
     </section>
   )
 }

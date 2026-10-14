@@ -1,20 +1,31 @@
 /* Tabla sencilla de precios (quilataje · USD) */
-.price-list {
-  width: 80%;
+.price-table {
+  width: 100%;
+  max-width: 26rem;
   overflow-x: auto;
   border-radius: var(--radius-xl);
-  background: var(--color-surface-container-low);
-  margin: auto;
+  background: color-mix(in srgb, var(--color-surface-container-low) 70%, transparent);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-2xl);
+  border: 1px solid color-mix(in srgb, var(--color-divider) 50%, transparent);
+  margin: 0 auto;
+  transition: background-color var(--duration) var(--ease), border-color var(--duration) var(--ease);
 }
 
-.price-list__table {
+.price-table:hover {
+  background: color-mix(in srgb, var(--color-surface-container) 85%, transparent);
+}
+
+.price-table__table {
   width: 100%;
   font: var(--type-body-sm);
 }
 
-.price-list__title {
-  padding: 0.85rem 1rem;
-  background: var(--color-surface-container);
+.price-table__title {
+  padding: 0.85rem 1.75rem;
+  background: color-mix(in srgb, var(--color-surface-container) 70%, transparent);
+  border-bottom: 1px solid var(--color-divider);
   font: var(--type-label-sm);
   letter-spacing: var(--tracking-label-sm);
   text-transform: uppercase;
@@ -22,14 +33,14 @@
   color: var(--color-primary);
 }
 
-.price-list__table th,
-.price-list__table td {
-  padding: 0.75rem 1rem;
+.price-table__table th,
+.price-table__table td {
+  padding: 0.75rem 1.75rem;
   border-bottom: 1px solid var(--color-divider);
   white-space: nowrap;
 }
 
-.price-list__table thead th {
+.price-table__table thead th {
   font: var(--type-label-sm);
   letter-spacing: var(--tracking-label-sm);
   text-transform: uppercase;
@@ -37,33 +48,41 @@
   text-align: right;
 }
 
-.price-list__table .price-list__karat {
+.price-table__table .price-table__karat {
   text-align: left;
 }
 
-.price-list__karat-name {
+.price-table__karat-name {
   font-weight: 500;
   color: var(--color-on-surface);
 }
 
-.price-list__table td {
+.price-table__table td {
   text-align: right;
   font-family: var(--font-mono);
   color: var(--color-on-surface);
 }
 
-.price-list__table tbody tr:last-child > * {
+.price-table__table tbody tr:last-child > * {
   border-bottom: none;
 }
 
-.price-list__table tbody tr:hover {
-  background: var(--color-surface-container-high);
+.price-table__table tbody tr:hover {
+  background: color-mix(in srgb, var(--color-surface-container-high) 60%, transparent);
 }
 
 /* Teléfono: celdas más compactas para que quepa sin desplazamiento */
 @media (max-width: 639.98px) {
-  .price-list__table th,
-  .price-list__table td {
-    padding: 0.65rem 0.75rem;
+  .price-table {
+    max-width: 22rem;
+  }
+
+  .price-table__title {
+    padding: 0.75rem 1.25rem;
+  }
+
+  .price-table__table th,
+  .price-table__table td {
+    padding: 0.65rem 1.25rem;
   }
 }

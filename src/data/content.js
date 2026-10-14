@@ -1,10 +1,9 @@
 import logo from './logo.webp'
+import craftImage from './taller-darelis.webp'
+import appraisalImage from './tasacion-prendas.webp'
 export const LOGO = logo
-export const ATELIER_IMAGE =
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuBC3QM_8tYVMKlRQA8AI2LMoNWWzUGlSY9Da1lft7nGTqdoix6BODWteHdVsm2cgu08uXLm4NbYT9MHF-9imPPrjS3Ba8eoGvWuoKcSKyQjJWHVTvUhHtsLDp_mhToQJQi-RtsI4hKd9iU5b_L3xd91xYO1FUsKHqwi6ET_ktmdO9fyZ31aRYk1Yub97Uq5J5_NTaNJgGUKCZ6YFwRUNDi7nkn76CT5ywOO7qdP4M_UFdIbh6d6Grkd'
-
-export const PRESENCE_IMAGE =
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuC162Xp7Tydvx82Civ0LISlceAFxBz05-5oRwG51f1W724_Jr73DaD2aBAJ4Rq29ac6R3joGaPENdcM_YFBJwEh4Pd3Dh9BNIzl4qVipm6IxxmpTBtNe3ogQZ005cmyWzmITZ5OyuzNbfT3R7p_z402n0xQusYOxclkVO7RxJkGy2RPupFkQAlfcs2X62OHyQviVB0hx4W20C4L6Gx6dXnc6nUi-3p5L39aYnAS3auXhEVmD8-07bky'
+export const CRAFT_IMAGE = craftImage
+export const APPRAISAL_IMAGE = appraisalImage
 
 // TODO: sustituir por el número real (código de país + número, sin "+" ni espacios).
 export const WHATSAPP_NUMBER = '53126406'
@@ -30,26 +29,79 @@ export const CATALOG_API_URL = `${import.meta.env.VITE_API_URL ?? 'http://localh
 // permanente con Nginx, esta URL se cambiará por la del servidor.
 export const GOLD_PRICES_JSON_URL = `${import.meta.env.BASE_URL}gold-prices.json`
 
+// Diferencias fijas aplicadas sobre el precio base de la API para la venta de prendas por quilate (USD/g):
+// - 10k: 85 - 55.83 = +29.17
+// - 14k: 95 - 78.33 = +16.67
+// - 18k: 100 - 100.42 = -0.42
+// - 22k: 0
+export const GOLD_SELL_DIFFERENCES = {
+  '10k': 29.17,
+  '14k': 16.67,
+  '18k': -0.42,
+  '22k': 0,
+}
+
+// Quilatajes que se muestran en los informes de precios (venta y compra).
+export const DISPLAYED_KARATS = ['10k', '14k', '18k', '22k']
+
+export function applySellPriceDifferences(rows) {
+  if (!Array.isArray(rows)) return []
+  return rows.filter((row) => DISPLAYED_KARATS.includes(row.karat)).map((row) => {
+    const diff = GOLD_SELL_DIFFERENCES[row.karat] ?? 0
+    return {
+      ...row,
+      sellUSD:
+        row.sellUSD != null
+          ? Math.round((row.sellUSD + diff) * 100) / 100
+          : row.sellUSD,
+    }
+  })
+}
+
 // Filas de la tabla de precios del oro (por gramo), de menor a mayor quilataje.
-// Valores de respaldo: calculados a mano el 2026-09-28 con el precio spot real de Alpha
-// Vantage (oro puro ≈ $132.53/g). Se muestran hasta que `npm run gold:update` genere
-// public/gold-prices.json; a partir de ahí el fetch de PriceReport los reemplaza.
-export const GOLD_PRICES_UPDATED_AT = new Date('2026-09-28T15:10:43Z')
+// Valores base según la API. Se les aplican las diferencias fijas de venta al renderizar.
+export const GOLD_PRICES_UPDATED_AT = new Date('2026-10-12T11:00:00Z')
 
 export const GOLD_PRICES = [
-  { karat: '10k', buyUSD: 50.26, sellUSD: 55.26 },
-  { karat: '14k', buyUSD: 72.53, sellUSD: 77.53 },
-  { karat: '18k', buyUSD: 94.4, sellUSD: 99.4 },
-  { karat: '22k', buyUSD: 116.4, sellUSD: 121.4 },
-  { karat: '24k', buyUSD: 127.4, sellUSD: 132.4 },
+  { karat: '10k', buyUSD: 50.83, sellUSD: 55.83 },
+  { karat: '14k', buyUSD: 73.33, sellUSD: 78.33 },
+  { karat: '18k', buyUSD: 95.42, sellUSD: 100.42 },
+  { karat: '22k', buyUSD: 117.65, sellUSD: 122.65 },
 ]
 
+// Diferencias fijas aplicadas sobre el precio base de la API para la compra de chatarra por quilate (USD/g):
+// - 10k: 45 - 55.83 = -10.83
+// - 14k: 65 - 78.33 = -13.33
+// - 18k: 80 - 100.42 = -20.42
+// - 22k: descuento estándar de $5.00
+export const SCRAP_BUY_DIFFERENCES = {
+  '10k': -10.83,
+  '14k': -13.33,
+  '18k': -20.42,
+  '22k': -5.0,
+}
+
+export function applyScrapPriceDifferences(rows) {
+  if (!Array.isArray(rows)) return []
+  return rows.filter((row) => DISPLAYED_KARATS.includes(row.karat)).map((row) => {
+    const diff = SCRAP_BUY_DIFFERENCES[row.karat] ?? 0
+    return {
+      ...row,
+      buyUSD:
+        row.buyUSD != null
+          ? Math.max(Math.round((row.buyUSD + diff) * 100) / 100, 0)
+          : row.buyUSD,
+    }
+  })
+}
+
 // Precios de compra de oro como chatarra (por gramo). La joyería solo compra.
+// Valores base según la API. Se les aplican las diferencias fijas de chatarra al renderizar.
 export const SCRAP_PRICES = [
-  { karat: '10k', buyUSD: 50.26 },
-  { karat: '12k', buyUSD: 61.26 },
-  { karat: '14k', buyUSD: 72.53 },
-  { karat: '18k', buyUSD: 94.4 },
-  { karat: '22k', buyUSD: 116.4 },
-  { karat: '24k', buyUSD: 127.4 },
+  { karat: '10k', buyUSD: 55.83 },
+  { karat: '14k', buyUSD: 78.33 },
+  { karat: '18k', buyUSD: 100.42 },
+  { karat: '22k', buyUSD: 122.65 },
 ]
+
+

@@ -7,34 +7,28 @@ import './PageLoader.css'
  */
 function PageLoader({ isLoading, title = 'Cargando' }) {
   const [mounted, setMounted] = useState(isLoading)
-  const [isClosing, setIsClosing] = useState(false)
+
+  // Al empezar a cargar se monta en el mismo render (sin pasar por un efecto).
+  if (isLoading && !mounted) setMounted(true)
+
+  // Al terminar de cargar sigue montado mientras dura la animación de salida.
+  const isClosing = mounted && !isLoading
 
   useEffect(() => {
-    let timer = null
-    if (isLoading) {
-      setMounted(true)
-      setIsClosing(false)
-    } else if (mounted) {
-      setIsClosing(true)
-      timer = setTimeout(() => {
-        setMounted(false)
-        setIsClosing(false)
-      }, 300)
-    }
-    return () => {
-      if (timer) clearTimeout(timer)
-    }
-  }, [isLoading, mounted])
+    if (!isClosing) return
+    const timer = setTimeout(() => setMounted(false), 300)
+    return () => clearTimeout(timer)
+  }, [isClosing])
 
   if (!mounted) return null
 
   return (
     <div
-      className={`page-loader-overlay${isClosing ? ' page-loader-overlay--closing' : ''}`}
+      className={`page-loader__overlay${isClosing ? ' page-loader__overlay--closing' : ''}`}
       role="status"
       aria-live="polite"
     >
-      <div className="page-loader-modal">
+      <div className="page-loader__modal">
         <div className="page-loader__spinner" aria-hidden="true" />
         <h2 className="page-loader__title">{title}</h2>
       </div>

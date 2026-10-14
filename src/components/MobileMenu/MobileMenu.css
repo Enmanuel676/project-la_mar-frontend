@@ -7,18 +7,28 @@
   align-items: center;
   justify-content: center;
   padding: 0 var(--margin-mobile);
+  overscroll-behavior: contain;
 }
 
 .mobile-menu.is-shown {
   display: flex;
 }
 
+/* Velo sobre la página: el mismo desenfoque de 14px que la barra de navegación y el
+   cargador, para que el fondo apenas se adivine detrás del menú */
 .mobile-menu__scrim {
   position: absolute;
   inset: 0;
   opacity: 0;
-  background: #170b0959;
+  background: radial-gradient(
+    circle at top,
+    color-mix(in srgb, var(--color-surface-container-lowest) 80%, transparent) 0%,
+    color-mix(in srgb, #000 86%, transparent) 100%
+  );
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
   transition: opacity 0.35s;
+  touch-action: none;
 }
 
 .mobile-menu.is-open .mobile-menu__scrim {

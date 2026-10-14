@@ -1,0 +1,58 @@
+/* Tarjeta 03: ubicación del taller en Google Maps */
+.location-card {
+  padding: var(--space-md);
+}
+
+.location-card__map-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  min-height: 280px;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-container-lowest);
+  box-shadow: var(--shadow-md);
+}
+
+.location-card__map-iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+.location-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.location-card__title {
+  font: var(--type-headline-lg);
+  color: var(--color-on-surface);
+}
+
+.location-card__text {
+  font: var(--type-body-md);
+  line-height: 1.625;
+  letter-spacing: 0.01em;
+  color: var(--color-on-surface-variant);
+}
+
+@media (min-width: 768px) {
+  .location-card {
+    max-width: 28rem;
+    padding: var(--space-lg);
+  }
+
+  .location-card__map-container {
+    aspect-ratio: 1 / 1;
+    min-height: 340px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .location-card {
+    max-width: 36rem;
+  }
+}

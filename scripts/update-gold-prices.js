@@ -21,16 +21,13 @@ const GOLD_PRICES = [
   { karat: '14k' },
   { karat: '18k' },
   { karat: '22k' },
-  { karat: '24k' },
 ]
 
 const SCRAP_PRICES = [
   { karat: '10k' },
-  { karat: '12k' },
   { karat: '14k' },
   { karat: '18k' },
   { karat: '22k' },
-  { karat: '24k' },
 ]
 
 const KARAT_FRACTIONS = {
@@ -78,9 +75,8 @@ function buildGoldRows(rows, pricePerGramPure) {
 function buildScrapRows(rows, pricePerGramPure) {
   return rows.map((row) => {
     const fraction = karatToFraction(row.karat)
-    const sellUSD = pricePerGramPure * fraction
-    const buyUSD = Math.max(round2(sellUSD - BUY_DISCOUNT_USD), 0)
-    return { karat: row.karat, buyUSD }
+    const baseSpotUSD = round2(pricePerGramPure * fraction)
+    return { karat: row.karat, buyUSD: baseSpotUSD }
   })
 }
 

@@ -1,9 +1,9 @@
-/* Tarjeta 02: el anillo puesto (foto con cita) */
-.presence-card {
+/* Tarjeta 02: el oficio en el taller (foto con cita) */
+.craft-card {
   padding: var(--space-md);
 }
 
-.presence-card__media {
+.craft-card__media {
   position: relative;
   overflow: hidden;
   aspect-ratio: 4 / 3;
@@ -11,7 +11,7 @@
   background: var(--color-surface-container-lowest);
 }
 
-.presence-card__image {
+.craft-card__image {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -19,62 +19,74 @@
   transition: transform 700ms var(--ease);
 }
 
-.presence-card__image:hover {
+.craft-card__media:hover .craft-card__image {
   transform: scale(1.05);
 }
 
-.presence-card__shade {
+.craft-card__shade {
   position: absolute;
   inset: 0;
   opacity: 0.6;
   background: linear-gradient(to top, var(--color-surface-container-lowest), transparent 50%, transparent);
 }
 
-.presence-card__caption {
+.craft-card__caption {
   position: absolute;
   right: 1rem;
   bottom: 1rem;
   left: 1rem;
 }
 
-.presence-card__quote {
+.craft-card__quote {
   font: var(--type-headline-md);
   font-style: italic;
   color: var(--color-on-surface);
   filter: drop-shadow(0 3px 3px rgb(0 0 0 / 0.12));
 }
 
-.presence-card__body {
+.craft-card__body {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
   padding-top: 0.25rem;
 }
 
-.presence-card__title {
+.craft-card__title {
   font: var(--type-headline-md);
   color: var(--color-on-surface);
 }
 
-.presence-card__text {
+.craft-card__text {
   font: var(--type-body-md);
   letter-spacing: 0.01em;
   color: var(--color-on-surface-variant);
 }
 
 @media (min-width: 768px) {
-  .presence-card {
+  .craft-card {
     max-width: 28rem;
     padding: var(--space-lg);
   }
 
-  .presence-card__media {
+  .craft-card__media {
     aspect-ratio: 3 / 4;
   }
 }
 
 @media (min-width: 1024px) {
-  .presence-card {
+  .craft-card {
     max-width: 36rem;
+  }
+}
+
+/* Solo móvil: foto más alta (casi su proporción original) y cita más pequeña */
+@media (max-width: 767px) {
+  .craft-card__media {
+    aspect-ratio: 4 / 5;
+  }
+
+  .craft-card__quote {
+    font-size: 1.0625rem;
+    line-height: 1.35;
   }
 }

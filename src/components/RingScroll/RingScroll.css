@@ -34,7 +34,8 @@
   mask-composite: intersect;
 }
 
-/* Lienzo con el fotograma actual (1280×720), escalado como un video en "cover" */
+/* Lienzo con el fotograma actual (1280×720, o en móvil solo la franja que se ve; ver
+   lib/ringFrames.js), escalado como un video en "cover" */
 .ring-scroll__canvas {
   position: absolute;
   inset: 0;
@@ -44,7 +45,7 @@
   image-rendering: pixelated;
 }
 
-/* Brillo que recorre el anillo: mide 2.5 veces el marco y RingScrollVideo.jsx
+/* Brillo que recorre el anillo: mide 2.5 veces el marco y RingScroll.jsx
    lo desplaza con transform (0% a -60%) para no repintarlo en cada frame */
 .ring-scroll__glint {
   position: absolute;

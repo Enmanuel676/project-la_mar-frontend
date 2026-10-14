@@ -1,5 +1,5 @@
 /* Pop-up modal de carga a pantalla completa con fondo desenfocado (blur idéntico a la barra de navegación) */
-.page-loader-overlay {
+.page-loader__overlay {
   position: fixed;
   inset: 0;
   z-index: 100;
@@ -14,12 +14,12 @@
   transition: opacity 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.page-loader-overlay--closing {
+.page-loader__overlay--closing {
   opacity: 0;
   pointer-events: none;
 }
 
-.page-loader-modal {
+.page-loader__modal {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -34,7 +34,7 @@
   transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.page-loader-overlay--closing .page-loader-modal {
+.page-loader__overlay--closing .page-loader__modal {
   transform: scale(0.95);
 }
 
@@ -67,8 +67,8 @@
   .page-loader__spinner {
     animation-duration: 2s;
   }
-  .page-loader-overlay,
-  .page-loader-modal {
+  .page-loader__overlay,
+  .page-loader__modal {
     transition: none;
   }
 }

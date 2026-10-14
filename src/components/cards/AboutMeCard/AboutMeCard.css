@@ -1,63 +1,72 @@
-/* Tarjeta 01: procedencia de la esmeralda */
-.provenance-card {
+/* Tarjeta 01: Sobre mí (presentación y trayectoria artesanal) */
+.about-me-card {
   padding: var(--space-lg);
 }
 
-.provenance-card__title {
+.about-me-card__title {
   font: var(--type-headline-lg);
   line-height: 1.25;
   color: var(--color-on-surface);
 }
 
-.provenance-card__text {
+.about-me-card__text {
   font: var(--type-body-md);
   line-height: 1.625;
   letter-spacing: 0.01em;
   color: var(--color-on-surface-variant);
 }
 
-.provenance-card__stats {
+.about-me-card__condition {
+  color: var(--color-secondary);
+  font-style: italic;
+}
+
+.about-me-card__stats {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 100%;
   gap: var(--space-sm);
   padding-top: var(--space-xs);
 }
 
-.provenance-card__stat {
-  padding: 0.75rem;
+.about-me-card__stat {
+  text-align: center;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 30%, transparent);
+  padding: 0.75rem 0.5rem;
   border-radius: var(--radius-lg);
   background: color-mix(in srgb, var(--color-surface-container-high) 60%, transparent);
 }
 
-.provenance-card__stat-label {
+.about-me-card__stat-label {
   display: block;
   font: var(--type-label-sm);
   letter-spacing: var(--tracking-label-sm);
   text-transform: uppercase;
   color: var(--color-outline);
+  margin-bottom: 0.25rem;
 }
 
-.provenance-card__stat-value {
+.about-me-card__stat-value {
   font: var(--type-headline-md);
   color: var(--color-on-surface);
 }
 
-.provenance-card__stat-value--accent {
+.about-me-card__stat-value--accent {
   color: var(--color-secondary);
 }
 
-.provenance-card__cert {
+.about-me-card__guarantee {
   display: flex;
   align-items: center;
   gap: 0.75rem;
   padding-top: var(--space-xs);
 }
 
-.provenance-card__cert .provenance-card__cert-icon {
+.about-me-card__guarantee .about-me-card__guarantee-icon {
   color: var(--color-primary);
 }
 
-.provenance-card__cert-text {
+.about-me-card__guarantee-text {
   font: var(--type-label-sm);
   letter-spacing: var(--tracking-label-md);
   text-transform: uppercase;
@@ -65,14 +74,14 @@
 }
 
 @media (min-width: 768px) {
-  .provenance-card {
+  .about-me-card {
     max-width: 28rem;
     padding: var(--space-xl);
   }
 }
 
 @media (min-width: 1024px) {
-  .provenance-card {
+  .about-me-card {
     max-width: 32rem;
   }
 }

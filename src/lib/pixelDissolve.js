@@ -1,6 +1,6 @@
-// Efecto de aparición/desaparición en píxeles: una máscara CSS generada en
-// canvas oculta el elemento celda a celda, y un canvas superpuesto (.pixel-fx)
-// pinta "chispas" de color en el borde de la transición.
+// Efecto de aparición/desaparición en píxeles: una máscara CSS (un SVG con las
+// celdas visibles) oculta el elemento celda a celda, y un canvas superpuesto
+// (.pixel-card__fx) pinta "chispas" de color en el borde de la transición.
 
 const CELL = 14
 const STEPS = 28
@@ -21,7 +21,7 @@ export const prefersReducedMotion = () =>
 const clamp01 = (value) => (value < 0 ? 0 : value > 1 ? 1 : value)
 
 export function createSurface(el, fx, { fromTop = false } = {}) {
-  return { el, fx, fromTop, grid: null, cache: {}, key: null, blur: null }
+  return { el, fx, fromTop, grid: null, cache: {}, key: null, blur: null, state: null }
 }
 
 function buildGrid(surface) {
@@ -64,26 +64,45 @@ function cellAlpha(threshold, reveal, conceal) {
   return distance < EDGE ? 0.35 + (distance / EDGE) * 0.5 : 1
 }
 
+// Rectángulo que cubre las celdas `from`…`to` (sin incluir) de una fila, como trazo SVG.
+const cellRun = (from, to, row) =>
+  `M${from * CELL} ${row * CELL}h${(to - from) * CELL}v${CELL}h${(from - to) * CELL}z`
+
+// La máscara es un SVG y no un PNG: generar el texto es casi gratis, mientras que
+// codificar un PNG (canvas.toDataURL) bloqueaba el hilo principal en cada paso nuevo y
+// trababa el scroll en móviles. Además el SVG queda nítido a cualquier densidad de píxeles.
 function maskFor(surface, revealStep, concealStep) {
   const cacheKey = `${revealStep}_${concealStep}`
   if (surface.cache[cacheKey]) return surface.cache[cacheKey]
 
   const { grid } = surface
-  const canvas = document.createElement('canvas')
-  canvas.width = grid.w
-  canvas.height = grid.h
-  const ctx = canvas.getContext('2d')
   const reveal = revealStep / STEPS
   const conceal = concealStep / STEPS
 
-  for (let i = 0; i < grid.t.length; i++) {
-    const alpha = cellAlpha(grid.t[i], reveal, conceal)
-    if (alpha <= 0) continue
-    ctx.fillStyle = `rgba(0,0,0,${alpha.toFixed(2)})`
-    ctx.fillRect((i % grid.cols) * CELL, Math.floor(i / grid.cols) * CELL, CELL, CELL)
+  // Un trazo por nivel de opacidad; las celdas seguidas de una fila con la misma
+  // opacidad se juntan en un solo rectángulo.
+  const paths = new Map()
+  for (let row = 0; row < grid.rows; row++) {
+    let start = 0
+    let level = null
+    for (let col = 0; col <= grid.cols; col++) {
+      const alpha = col < grid.cols ? cellAlpha(grid.t[row * grid.cols + col], reveal, conceal) : 0
+      const next = alpha > 0 ? alpha.toFixed(2) : null
+      if (next === level) continue
+      if (level !== null) paths.set(level, (paths.get(level) ?? '') + cellRun(start, col, row))
+      level = next
+      start = col
+    }
   }
 
-  const mask = `url(${canvas.toDataURL('image/png')})`
+  let shapes = ''
+  paths.forEach((d, alpha) => {
+    shapes += `<path fill-opacity="${alpha}" d="${d}"/>`
+  })
+  const svg =
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${grid.w}" height="${grid.h}" viewBox="0 0 ${grid.w} ${grid.h}" ` +
+    `preserveAspectRatio="none" shape-rendering="crispEdges">${shapes}</svg>`
+  const mask = `url("data:image/svg+xml,${encodeURIComponent(svg)}")`
   surface.cache[cacheKey] = mask
   return mask
 }
@@ -120,6 +139,11 @@ function setBlur(surface, px) {
  */
 export function renderSurface(surface, reveal, conceal = 0, extraBlur = 0) {
   ensureGrid(surface)
+  return paintSurface(surface, reveal, conceal, extraBlur)
+}
+
+// renderSurface sin medir el elemento: quien la llama ya puso la rejilla al día.
+function paintSurface(surface, reveal, conceal, extraBlur) {
   const revealStep = Math.round(clamp01(reveal) * STEPS)
   const concealStep = Math.round(clamp01(conceal) * STEPS)
   const hidden = revealStep === 0 || concealStep === STEPS
@@ -147,6 +171,7 @@ const scrollSurfaces = new Set()
 let frameId = null
 let lastScrollY = 0
 let scrollBlur = 0
+let mobileQuery = null
 
 function tick() {
   const vh = window.innerHeight
@@ -154,17 +179,29 @@ function tick() {
   lastScrollY = window.scrollY
   scrollBlur += (Math.min(MAX_SCROLL_BLUR, delta * 0.04) - scrollBlur) * 0.2
 
-  const range = window.matchMedia('(max-width: 767px)').matches ? MOBILE_RANGE : DESKTOP_RANGE
+  mobileQuery ??= window.matchMedia('(max-width: 767px)')
+  const range = mobileQuery.matches ? MOBILE_RANGE : DESKTOP_RANGE
 
+  // Primero se mide todo y después se escribe: intercalarlo obligaría al navegador a
+  // recalcular los estilos una vez por tarjeta en cada frame.
+  const centers = []
   scrollSurfaces.forEach((surface) => {
+    ensureGrid(surface)
     const rect = surface.el.getBoundingClientRect()
-    const center = (rect.top + rect.bottom) / 2
-    const state = renderSurface(
+    centers.push((rect.top + rect.bottom) / 2)
+  })
+
+  let index = 0
+  scrollSurfaces.forEach((surface) => {
+    const center = centers[index++]
+    const state = paintSurface(
       surface,
       clamp01((vh * range.inFrom - center) / (vh * (range.inFrom - range.inTo))),
       clamp01((vh * range.outFrom - center) / (vh * (range.outFrom - range.outTo))),
       scrollBlur,
     )
+    if (state === surface.state) return
+    surface.state = state
     surface.el.classList.toggle('is-hidden', state === 'hidden')
     surface.el.style.pointerEvents = state === 'full' ? '' : 'none'
   })

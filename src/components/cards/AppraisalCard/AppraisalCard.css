@@ -1,0 +1,74 @@
+/* Tarjeta 04: tasación de prendas (foto de la balanza y los ácidos) */
+.appraisal-card {
+  padding: var(--space-md);
+}
+
+.appraisal-card__media {
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-container-lowest);
+}
+
+.appraisal-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 55%;
+}
+
+.appraisal-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.appraisal-card__title {
+  font: var(--type-headline-lg);
+  color: var(--color-on-surface);
+}
+
+.appraisal-card__text {
+  font: var(--type-body-md);
+  line-height: 1.625;
+  letter-spacing: 0.01em;
+  color: var(--color-on-surface-variant);
+}
+
+.appraisal-card__action {
+  padding-top: 0.25rem;
+}
+
+.appraisal-card__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-lg);
+  background: var(--color-primary);
+  box-shadow: var(--shadow-lg);
+  font: var(--type-label-md);
+  letter-spacing: var(--tracking-label-md);
+  text-transform: uppercase;
+  color: var(--color-on-primary);
+  transition: background-color var(--duration) var(--ease);
+}
+
+.appraisal-card__button:hover {
+  background: var(--color-primary-container);
+}
+
+@media (min-width: 768px) {
+  .appraisal-card {
+    max-width: 28rem;
+    padding: var(--space-lg);
+  }
+}
+
+@media (min-width: 1024px) {
+  .appraisal-card {
+    max-width: 32rem;
+  }
+}

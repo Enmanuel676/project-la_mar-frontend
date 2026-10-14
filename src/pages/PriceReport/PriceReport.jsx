@@ -1,15 +1,22 @@
 import { useEffect, useState } from 'react'
 import PriceTable from '../../components/PriceTable/PriceTable'
-import { GOLD_PRICES, GOLD_PRICES_JSON_URL, GOLD_PRICES_UPDATED_AT, SCRAP_PRICES, WHATSAPP_URL } from '../../data/content'
-import { formatPrice } from '../../lib/formatPrice'
+import {
+  GOLD_PRICES,
+  GOLD_PRICES_JSON_URL,
+  GOLD_PRICES_UPDATED_AT,
+  SCRAP_PRICES,
+  WHATSAPP_URL,
+  applyScrapPriceDifferences,
+  applySellPriceDifferences,
+} from '../../data/content'
 import './PriceReport.css'
 
-// Precios del oro por gramo en USD: joya como prenda (compra y venta) y joya como chatarra (solo compra).
+// Precios del oro por gramo en USD: joya como prenda (solo venta) y joya como chatarra (solo compra).
 // `npm run gold:update` calcula estos precios una vez al día y los publica como JSON
 // (ver scripts/update-gold-prices.js); aquí solo se leen. Si la petición falla, se quedan las filas en "—".
 function PriceReport() {
-  const [rows, setRows] = useState(GOLD_PRICES)
-  const [scrapRows, setScrapRows] = useState(SCRAP_PRICES)
+  const [rows, setRows] = useState(() => applySellPriceDifferences(GOLD_PRICES))
+  const [scrapRows, setScrapRows] = useState(() => applyScrapPriceDifferences(SCRAP_PRICES))
   const [updatedAt, setUpdatedAt] = useState(GOLD_PRICES_UPDATED_AT)
 
   useEffect(() => {
@@ -22,8 +29,10 @@ function PriceReport() {
       })
       .then((data) => {
         if (cancelled) return
-        setRows(data.rows ?? GOLD_PRICES)
-        setScrapRows(data.scrapRows ?? SCRAP_PRICES)
+        const rawRows = data.rows ?? GOLD_PRICES
+        const rawScrapRows = data.scrapRows ?? SCRAP_PRICES
+        setRows(applySellPriceDifferences(rawRows))
+        setScrapRows(applyScrapPriceDifferences(rawScrapRows))
         setUpdatedAt(data.updatedAt ? new Date(data.updatedAt) : null)
       })
       .catch((error) => {
@@ -55,45 +64,7 @@ function PriceReport() {
             <p className="price-report__note">Precio por gramo según el quilataje.</p>
           </div>
 
-          {/* Tableta y computadora: una sola tabla con compra y venta */}
-          <div className="price-report__full">
-            <table className="price-table">
-              <thead>
-                <tr>
-                  <th rowSpan={2} scope="col" className="price-table__karat">
-                    Quilataje
-                  </th>
-                  <th scope="col" className="price-table__group">
-                    Compramos
-                  </th>
-                  <th scope="col" className="price-table__group">
-                    Vendemos
-                  </th>
-                </tr>
-                <tr>
-                  <th scope="col">USD</th>
-                  <th scope="col">USD</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map((row) => (
-                  <tr key={row.karat}>
-                    <th scope="row" className="price-table__karat">
-                      <span className="price-table__karat-name">{row.karat}</span>
-                    </th>
-                    <td>{formatPrice(row.buyUSD, 'USD')}</td>
-                    <td>{formatPrice(row.sellUSD, 'USD')}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Teléfono: la tabla se divide en dos, primero la venta y después la compra */}
-          <div className="price-report__split">
-            <PriceTable title="Vendemos" rows={rows} usdKey="sellUSD" />
-            <PriceTable title="Compramos" rows={rows} usdKey="buyUSD" />
-          </div>
+          <PriceTable title="Vendemos" rows={rows} usdKey="sellUSD" />
         </div>
 
         <div className="price-report__block price-report__block--scrap">

@@ -10,7 +10,8 @@ Inicio elige una según la velocidad de conexión (src/lib/networkTier.js):
   de cada 4 fotogramas (6 por segundo): los menos posibles para que cargue rápido.
 - low: una sola imagen fija, media/ring-low.png.
 
-Si cambia el número de fotogramas, actualiza SEQUENCES en src/lib/ringFrames.js.
+Si cambia el número de fotogramas, actualiza SEQUENCES en src/lib/ringFrames.js, y si
+cambia SIZE, FRAME_WIDTH y FRAME_HEIGHT en ese mismo archivo.
 """
 import glob
 import os
