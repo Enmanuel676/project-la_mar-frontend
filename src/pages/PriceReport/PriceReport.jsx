@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react'
+import PageLoader from '../../components/PageLoader/PageLoader'
 import PriceTable from '../../components/PriceTable/PriceTable'
 import {
-  GOLD_PRICES,
+  EMPTY_PRICE_ROWS,
   GOLD_PRICES_JSON_URL,
-  GOLD_PRICES_UPDATED_AT,
-  SCRAP_PRICES,
   WHATSAPP_URL,
   applyScrapPriceDifferences,
   applySellPriceDifferences,
@@ -13,11 +12,14 @@ import './PriceReport.css'
 
 // Precios del oro por gramo en USD: joya como prenda (solo venta) y joya como chatarra (solo compra).
 // `npm run gold:update` calcula estos precios una vez al día y los publica como JSON
-// (ver scripts/update-gold-prices.js); aquí solo se leen. Si la petición falla, se quedan las filas en "—".
+// (ver scripts/update-gold-prices.js); aquí solo se leen. No hay precios por defecto: hasta que
+// llegan, las tablas muestran «—», y si la petición falla se avisa en vez de enseñar precios viejos.
 function PriceReport() {
-  const [rows, setRows] = useState(() => applySellPriceDifferences(GOLD_PRICES))
-  const [scrapRows, setScrapRows] = useState(() => applyScrapPriceDifferences(SCRAP_PRICES))
-  const [updatedAt, setUpdatedAt] = useState(GOLD_PRICES_UPDATED_AT)
+  const [rows, setRows] = useState(EMPTY_PRICE_ROWS)
+  const [scrapRows, setScrapRows] = useState(EMPTY_PRICE_ROWS)
+  const [updatedAt, setUpdatedAt] = useState(null)
+  // Mientras es 'loading' se ve el cargador encima de la página.
+  const [status, setStatus] = useState('loading') // 'loading' | 'ready' | 'error'
 
   useEffect(() => {
     let cancelled = false
@@ -29,14 +31,18 @@ function PriceReport() {
       })
       .then((data) => {
         if (cancelled) return
-        const rawRows = data.rows ?? GOLD_PRICES
-        const rawScrapRows = data.scrapRows ?? SCRAP_PRICES
-        setRows(applySellPriceDifferences(rawRows))
-        setScrapRows(applyScrapPriceDifferences(rawScrapRows))
+        // Sin las dos listas el archivo no sirve: se trata como un fallo, sin pintar nada a medias.
+        if (!Array.isArray(data.rows) || !Array.isArray(data.scrapRows)) {
+          throw new Error('El reporte de precios no tiene el formato esperado')
+        }
+        setRows(applySellPriceDifferences(data.rows))
+        setScrapRows(applyScrapPriceDifferences(data.scrapRows))
         setUpdatedAt(data.updatedAt ? new Date(data.updatedAt) : null)
+        setStatus('ready')
       })
       .catch((error) => {
         console.error('No se pudo cargar el precio del oro:', error)
+        if (!cancelled) setStatus('error')
       })
 
     return () => {
@@ -46,6 +52,8 @@ function PriceReport() {
 
   return (
     <section className="price-report">
+      <PageLoader isLoading={status === 'loading'} />
+
       <div className="price-report__inner">
         <div className="price-report__header">
           <div>
@@ -56,6 +64,12 @@ function PriceReport() {
             Última actualización: {updatedAt ? updatedAt.toLocaleString('es-ES') : '—'}
           </p>
         </div>
+
+        {status === 'error' && (
+          <p className="price-report__error" role="alert">
+            No pudimos cargar los precios del día. Inténtalo de nuevo en unos minutos.
+          </p>
+        )}
 
         <div className="price-report__block">
           <span className="price-report__line"></span>

@@ -41,6 +41,12 @@
   color: var(--color-outline);
 }
 
+/* Aviso cuando no se pudieron cargar los precios (mismo estilo que el del catálogo) */
+.price-report__error {
+  font: var(--type-body-md);
+  color: var(--color-on-surface-variant);
+}
+
 /* Bloques de precios: título, nota y tabla(s) */
 .price-report__block {
   display: flex;
