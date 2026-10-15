@@ -16,6 +16,8 @@ function ContactCta() {
           <a
             className="contact-cta__button contact-cta__button--primary"
             href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
           >
             Contactar por WhatsApp
           </a>
