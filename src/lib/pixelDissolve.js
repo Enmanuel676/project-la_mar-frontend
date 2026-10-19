@@ -206,7 +206,19 @@ function tick() {
     surface.el.style.pointerEvents = state === 'full' ? '' : 'none'
   })
 
-  frameId = scrollSurfaces.size ? requestAnimationFrame(tick) : null
+  const isMoving = delta > 0.1 || scrollBlur > 0.02
+  if (isMoving && scrollSurfaces.size) {
+    frameId = requestAnimationFrame(tick)
+  } else {
+    scrollBlur = 0
+    frameId = null
+  }
+}
+
+function onWindowScroll() {
+  if (!frameId && scrollSurfaces.size) {
+    frameId = requestAnimationFrame(tick)
+  }
 }
 
 /** Liga el efecto a la posición de scroll del elemento. Devuelve la limpieza. */
@@ -215,6 +227,9 @@ export function attachScrollDissolve(el, fx) {
 
   const surface = createSurface(el, fx)
   scrollSurfaces.add(surface)
+  if (scrollSurfaces.size === 1) {
+    window.addEventListener('scroll', onWindowScroll, { passive: true })
+  }
   if (!frameId) {
     lastScrollY = window.scrollY
     frameId = requestAnimationFrame(tick)
@@ -222,6 +237,13 @@ export function attachScrollDissolve(el, fx) {
 
   return () => {
     scrollSurfaces.delete(surface)
+    if (scrollSurfaces.size === 0) {
+      window.removeEventListener('scroll', onWindowScroll)
+      if (frameId) {
+        cancelAnimationFrame(frameId)
+        frameId = null
+      }
+    }
     el.classList.remove('is-hidden')
     el.style.filter = ''
     el.style.pointerEvents = ''

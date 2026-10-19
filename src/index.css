@@ -164,7 +164,3 @@ body {
   background: var(--color-primary);
   color: var(--color-on-primary);
 }
-
-::-webkit-scrollbar {
-  display: none;
-}

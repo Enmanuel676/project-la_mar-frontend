@@ -129,9 +129,7 @@ y la página avisa del fallo, para no enseñar nunca precios viejos como si fuer
   para dejarlo corriendo en otra terminal si el servidor de desarrollo pasa días abierto.
 - `npm run gold:update -- --once` hace una sola petición y termina. Es el modo pensado para un
   temporizador diario (systemd) en el servidor.
-- Variables: `ALPHA_VANTAGE_API_KEY` (la clave de Alpha Vantage; si no se define, se usa la que
-  trae el script) y `GOLD_PRICES_PATH` (dónde escribir el JSON; en el servidor, el archivo que
-  sirve Nginx).
+- Variables: `ALPHA_VANTAGE_API_KEY` (la clave de Alpha Vantage, definida en `.env` o en las variables de entorno del sistema; copia `.env.example` a `.env`) y `GOLD_PRICES_PATH` (dónde escribir el JSON; en el servidor, el archivo que sirve Nginx).
 
 ## Fotogramas del anillo
 

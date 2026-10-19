@@ -42,11 +42,10 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  image-rendering: pixelated;
 }
 
-/* Brillo que recorre el anillo: mide 2.5 veces el marco y RingScroll.jsx
-   lo desplaza con transform (0% a -60%) para no repintarlo en cada frame */
+/* Brillo sutil que recorre el anillo a lo largo del scroll: mide 2.5 veces el marco y RingScroll.jsx
+   lo desplaza suavemente con transform sin forzar repintados ni bloqueos de GPU */
 .ring-scroll__glint {
   position: absolute;
   top: 0;
@@ -54,9 +53,9 @@
   width: 250%;
   height: 100%;
   pointer-events: none;
-  background: linear-gradient(105deg, #0000 40%, #67fde11a 48%, #ffb59d14 52%, #0000 60%);
-  mix-blend-mode: screen;
-  transform: translate3d(-30%, 0, 0);
+  background: linear-gradient(105deg, transparent 40%, rgba(103, 253, 225, 0.1) 48%, rgba(255, 181, 157, 0.08) 52%, transparent 60%);
+  opacity: 0.9;
+  transform: translate3d(0, 0, 0);
   will-change: transform;
 }
 

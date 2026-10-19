@@ -9,9 +9,20 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
+// Cargar variables de entorno desde .env si existe localmente
+const envPath = path.resolve(__dirname, '..', '.env')
+if (fs.existsSync(envPath) && typeof process.loadEnvFile === 'function') {
+  try {
+    process.loadEnvFile(envPath)
+  } catch (error) {
+    console.warn('No se pudo cargar el archivo .env:', error.message)
+  }
+}
+
 // En el servidor, GOLD_PRICES_PATH apunta al archivo que sirve Nginx.
 const OUTPUT_PATH = process.env.GOLD_PRICES_PATH || path.join(__dirname, '..', 'public', 'gold-prices.json')
-const ALPHA_VANTAGE_API_KEY = process.env.ALPHA_VANTAGE_API_KEY || 'DA3MM4ZAJDRESJYI'
+const ALPHA_VANTAGE_API_KEY = process.env.ALPHA_VANTAGE_API_KEY
 
 const GRAMS_PER_TROY_OUNCE = 31.1034768
 const BUY_DISCOUNT_USD = 5
@@ -48,6 +59,9 @@ function round2(value) {
 }
 
 async function fetchGoldSpotPriceUSD() {
+  if (!ALPHA_VANTAGE_API_KEY) {
+    throw new Error('La variable de entorno ALPHA_VANTAGE_API_KEY no está configurada. Crea un archivo .env o expórtala en el entorno.')
+  }
   const url = `https://www.alphavantage.co/query?function=GOLD_SILVER_SPOT&symbol=GOLD&apikey=${ALPHA_VANTAGE_API_KEY}`
   const response = await fetch(url)
   if (!response.ok) {
