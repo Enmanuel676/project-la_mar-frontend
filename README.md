@@ -40,7 +40,7 @@ al volver a Inicio desde otra página no se descargan de nuevo.
 ## Stack
 
 - React 19 con Vite 8
-- React Router 8 (paquete `react-router`) para las rutas
+- React Router 8 (paquete `react-router`) para las rutas — **las URLs son visibles en la barra del navegador**: `/`, `/catalogo`, `/informes-precios`
 - CSS plano, un archivo por componente, con nombres BEM
 - ESLint (con los plugins de React Hooks y React Refresh)
 - Tipografías Montserrat y Playfair Display, e iconos Material Symbols (Google Fonts)
