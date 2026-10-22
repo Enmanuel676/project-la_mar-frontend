@@ -62,11 +62,13 @@ function notifyListeners() {
 
 const frameUrl = (index) => `${FRAMES_URL}${sequence.dir}/${String(index).padStart(3, '0')}.webp`
 
-// Primero el fotograma pedido, luego uno de cada 16 y después se rellenan los
-// huecos: el anillo ya gira completo (a saltos) antes de terminar la descarga.
+// Primero el fotograma pedido, luego uno de cada 4 y después se rellenan los
+// huecos: con el primer paso (1/4 de fotogramas = MIN_FRAMES) el hueco máximo
+// ya es <= MAX_BLEND_GAP (4), por lo que el anillo ya se puede fundir entero
+// sin saltos bruscos mientras se descargan los pasos 2 y 1.
 function loadOrder(first) {
   const order = [first]
-  for (let step = 16; step >= 1; step /= 2) {
+  for (let step = 4; step >= 1; step /= 2) {
     for (let i = 0; i < sequence.count; i += step) order.push(i)
   }
   return [...new Set(order)]

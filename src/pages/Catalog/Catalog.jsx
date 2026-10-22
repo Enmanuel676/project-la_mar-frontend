@@ -24,7 +24,9 @@ function CardImage({ alt, src }) {
 function Catalog() {
   const [items, setItems] = useState([])
   const [status, setStatus] = useState('loading') // 'loading' | 'ready' | 'error'
-  const [isLoading, setIsLoading] = useState(false)
+  // El cargador se ve desde el primer momento: mientras se pide el catálogo y hasta que
+  // llegan sus fotos (como mucho 8 s, ver abajo).
+  const [isLoading, setIsLoading] = useState(true)
   const [maximizedImage, setMaximizedImage] = useState(null)
 
   useEffect(() => {

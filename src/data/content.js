@@ -5,8 +5,9 @@ export const LOGO = logo
 export const CRAFT_IMAGE = craftImage
 export const APPRAISAL_IMAGE = appraisalImage
 
-// TODO: sustituir por el número real (código de país + número, sin "+" ni espacios).
-export const WHATSAPP_NUMBER = '53126406'
+// Formato internacional que pide wa.me: código de país (53, Cuba) + número, sin "+" ni espacios.
+// Es el mismo teléfono que muestra el pie de página (+53 53126406).
+export const WHATSAPP_NUMBER = '5353126406'
 export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`
 
 // `to` es una ruta interna (página); `href` es un enlace externo que se abre en otra pestaña.
@@ -44,6 +45,10 @@ export const GOLD_SELL_DIFFERENCES = {
 // Quilatajes que se muestran en los informes de precios (venta y compra).
 export const DISPLAYED_KARATS = ['10k', '14k', '18k', '22k']
 
+// Filas sin precio («—») mientras no llegan los datos de la API. No hay precios por defecto: si
+// la petición falla, es mejor no mostrar ninguno que enseñar unos viejos como si fueran del día.
+export const EMPTY_PRICE_ROWS = DISPLAYED_KARATS.map((karat) => ({ karat }))
+
 export function applySellPriceDifferences(rows) {
   if (!Array.isArray(rows)) return []
   return rows.filter((row) => DISPLAYED_KARATS.includes(row.karat)).map((row) => {
@@ -57,17 +62,6 @@ export function applySellPriceDifferences(rows) {
     }
   })
 }
-
-// Filas de la tabla de precios del oro (por gramo), de menor a mayor quilataje.
-// Valores base según la API. Se les aplican las diferencias fijas de venta al renderizar.
-export const GOLD_PRICES_UPDATED_AT = new Date('2026-10-12T11:00:00Z')
-
-export const GOLD_PRICES = [
-  { karat: '10k', buyUSD: 50.83, sellUSD: 55.83 },
-  { karat: '14k', buyUSD: 73.33, sellUSD: 78.33 },
-  { karat: '18k', buyUSD: 95.42, sellUSD: 100.42 },
-  { karat: '22k', buyUSD: 117.65, sellUSD: 122.65 },
-]
 
 // Diferencias fijas aplicadas sobre el precio base de la API para la compra de chatarra por quilate (USD/g):
 // - 10k: 45 - 55.83 = -10.83
@@ -94,14 +88,5 @@ export function applyScrapPriceDifferences(rows) {
     }
   })
 }
-
-// Precios de compra de oro como chatarra (por gramo). La joyería solo compra.
-// Valores base según la API. Se les aplican las diferencias fijas de chatarra al renderizar.
-export const SCRAP_PRICES = [
-  { karat: '10k', buyUSD: 55.83 },
-  { karat: '14k', buyUSD: 78.33 },
-  { karat: '18k', buyUSD: 100.42 },
-  { karat: '22k', buyUSD: 122.65 },
-]
 
 
